@@ -1,7 +1,8 @@
 /**
- * Questionnaire de qualification (marché espagnol).
- * L'ordre du tableau = l'ordre des étapes. Ajouter/retirer une question
- * ne demande aucune modification du composant de formulaire.
+ * Questionnaire de l'étape 3 (« Último paso antes de tu sesión »).
+ * Les coordonnées (nom, email, téléphone) sont déjà collectées à l'opt-in de
+ * l'étape 1 : on ne les redemande pas ici.
+ * L'ordre du tableau = l'ordre des étapes.
  */
 
 export type Question =
@@ -11,14 +12,6 @@ export type Question =
       label: string;
       help?: string;
       options: { value: string; label: string; disqualifying?: boolean }[];
-    }
-  | {
-      id: string;
-      kind: "text" | "email" | "tel";
-      label: string;
-      help?: string;
-      placeholder?: string;
-      required?: boolean;
     }
   | {
       id: string;
@@ -36,22 +29,10 @@ export const questions: Question[] = [
     kind: "choice",
     label: "¿Cuánto tiempo llevas operando?",
     options: [
+      { value: "nunca", label: "Todavía no he operado nunca" },
       { value: "menos-6m", label: "Menos de 6 meses" },
-      { value: "6m-1a", label: "Entre 6 meses y 1 año" },
-      { value: "1a-3a", label: "Entre 1 y 3 años" },
-      { value: "mas-3a", label: "Más de 3 años" },
-    ],
-  },
-  {
-    id: "capital",
-    kind: "choice",
-    label: "¿Con qué capital operas actualmente?",
-    help: "Incluye cuentas de fondeo si las tienes.",
-    options: [
-      { value: "menos-1k", label: "Menos de 1.000 €", disqualifying: true },
-      { value: "1k-5k", label: "Entre 1.000 € y 5.000 €" },
-      { value: "5k-25k", label: "Entre 5.000 € y 25.000 €" },
-      { value: "mas-25k", label: "Más de 25.000 €" },
+      { value: "6m-2a", label: "Entre 6 meses y 2 años" },
+      { value: "mas-2a", label: "Más de 2 años" },
     ],
   },
   {
@@ -65,10 +46,21 @@ export const questions: Question[] = [
     ],
   },
   {
+    id: "tiempo",
+    kind: "choice",
+    label: "¿Cuánto tiempo puedes dedicar al análisis cada día?",
+    help: "El método requiere entre 30 y 45 minutos diarios.",
+    options: [
+      { value: "menos-30", label: "Menos de 30 minutos", disqualifying: true },
+      { value: "30-45", label: "Entre 30 y 45 minutos" },
+      { value: "mas-45", label: "Más de 45 minutos" },
+    ],
+  },
+  {
     id: "inversion",
     kind: "choice",
     label:
-      "El programa requiere una inversión. ¿Estás en disposición de invertir en tu formación si encaja contigo?",
+      "La formación requiere una inversión. ¿Estás en disposición de invertir si encaja contigo?",
     options: [
       { value: "si", label: "Sí, si veo que encaja" },
       { value: "quizas", label: "Depende de la cantidad" },
@@ -83,26 +75,16 @@ export const questions: Question[] = [
     required: true,
     minLength: 20,
   },
-  {
-    id: "nombre",
-    kind: "text",
-    label: "¿Cómo te llamas?",
-    placeholder: "Nombre y apellidos",
-    required: true,
-  },
-  {
-    id: "email",
-    kind: "email",
-    label: "¿A qué email te enviamos la confirmación?",
-    placeholder: "tu@email.com",
-    required: true,
-  },
-  {
-    id: "telefono",
-    kind: "tel",
-    label: "¿Y tu teléfono (WhatsApp)?",
-    help: "Solo lo usamos para la llamada. Incluye el prefijo del país.",
-    placeholder: "+34 600 00 00 00",
-    required: true,
-  },
 ];
+
+/** Préfixes téléphoniques proposés à l'opt-in, repris du design. */
+export const phonePrefixes = [
+  { value: "+34", label: "🇪🇸 +34" },
+  { value: "+52", label: "🇲🇽 +52" },
+  { value: "+54", label: "🇦🇷 +54" },
+  { value: "+56", label: "🇨🇱 +56" },
+  { value: "+57", label: "🇨🇴 +57" },
+  { value: "+1", label: "🇺🇸 +1" },
+  { value: "+351", label: "🇵🇹 +351" },
+  { value: "+33", label: "🇫🇷 +33" },
+] as const;

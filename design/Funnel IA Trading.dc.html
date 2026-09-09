@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+<style>
+  html, body { margin:0; padding:0; background:#FFFFFF; }
+  body { font-family:'Plus Jakarta Sans',system-ui,sans-serif; color:#101A3D; font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  * { box-sizing:border-box; }
+  a { color:#2B4BF2; text-decoration:none; }
+  a:hover { color:#101A3D; text-decoration:underline; }
+  input, select, button, textarea { font-family:inherit; }
+  input::placeholder, textarea::placeholder { color:#9BA3BC; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline:2px solid #2B4BF2; outline-offset:2px; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+  @keyframes unlockPop { 0% { transform:scale(1) rotate(0); } 40% { transform:scale(1.12) rotate(-8deg); } 100% { transform:scale(1) rotate(0); } }
+</style>
+</helmet>
+
+<sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+<div style="padding-bottom:96px">
+  <div style="background:#2B4BF2;color:#FFFFFF;text-align:center;font-size:13px;letter-spacing:.04em;padding:9px 16px">NUEVO · MÉTODO IMPORTADO DE EE.UU.</div>
+  <header style="border-bottom:1px solid #E6EAF2">
+    <div style="max-width:1120px;margin:0 auto;padding:14px 20px;display:flex;align-items:center">
+      <span style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.02em">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#2B4BF2" /><path d="M6 15l3.5-4 2.5 2.5L16 7" stroke="#FFFFFF" stroke-width="1.8" /></svg>[MARCA]
+      </span>
+    </div>
+  </header>
+
+  <section style="max-width:900px;margin:0 auto;padding:clamp(28px,5vw,52px) 20px 0;text-align:center">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A93AD">Tu acceso está listo</div>
+    <h1 style="margin:14px 0 0;font-size:clamp(32px,7vw,52px);line-height:1.06;letter-spacing:-.025em;font-weight:800;text-wrap:pretty">Vive del trading con inteligencia artificial,<br /><span style="color:#2B4BF2">una hora al día.</span></h1>
+    <p style="margin:18px auto 0;max-width:60ch;font-size:16.5px;color:#5A6478;text-wrap:pretty">Dentro del vídeo está el método completo que usan los traders americanos para operar con criterio propio: sin años estudiando análisis técnico, sin copiar las señales de nadie y sin pasar el día delante de una pantalla. Dura 24 minutos. Ponlo con sonido y míralo entero.</p>
+  </section>
+
+  <section style="max-width:900px;margin:0 auto;padding:24px 20px 0">
+    <div ref="{{ playerRef }}" style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:10px">
+      <!-- REPRODUCTOR: el iframe real (Vimeo / Wistia) se carga solo al pulsar play (carga diferida). La miniatura se muestra primero. -->
+      <div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:repeating-linear-gradient(135deg,#F8FAFF 0 12px,#F5F7FB 12px 24px);display:flex;align-items:center;justify-content:center">
+        <sc-if value="{{ showPoster }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ play }}" aria-label="Reproducir el vídeo" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:none;border:none;cursor:pointer">
+            <span style="width:76px;height:76px;border-radius:50%;background:#2B4BF2;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(43,75,242,.32)"><svg width="24" height="26" viewBox="0 0 24 26" fill="none" aria-hidden="true"><path d="M4 2l16 11L4 24z" fill="#FFFFFF" /></svg></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#5A6478">[ MINIATURA + EMBED VSL 24 MIN ]</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ started }}">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;color:#5A6478">[ VÍDEO EN REPRODUCCIÓN · PLACEHOLDER ]</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:500;color:#101A3D">{{ clock }}</span>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- Barra de progreso NO clicable: no se puede adelantar. Pausa y retroceso sí. -->
+      <div style="margin-top:10px;height:5px;border-radius:99px;background:#E6EAF2;overflow:hidden" role="progressbar" aria-label="Progreso del vídeo">
+        <div style="{{ barStyle }}"></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding:0 2px 4px">
+        <div style="display:flex;gap:8px">
+          <button type="button" onClick="{{ toggle }}" style="padding:9px 14px;font-size:13px;font-weight:600;color:#FFFFFF;background:#2B4BF2;border:none;border-radius:8px;cursor:pointer">{{ playLabel }}</button>
+          <button type="button" onClick="{{ back10 }}" style="padding:9px 14px;font-size:13px;font-weight:500;color:#5A6478;background:#FFFFFF;border:1px solid #E6EAF2;border-radius:8px;cursor:pointer">−10s</button>
+          <button type="button" disabled="true" aria-disabled="true" title="No se puede adelantar" style="padding:9px 14px;font-size:13px;color:#B6BCCB;background:#F5F7FB;border:1px solid #E6EAF2;border-radius:8px;cursor:not-allowed">+10s</button>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8A93AD">{{ clock }} / 24:00</span>
+      </div>
+    </div>
+    <p style="margin:12px 0 0;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#8A93AD">1 vídeo · 24 minutos · acceso inmediato</p>
+  </section>
+
+  <section style="max-width:900px;margin:0 auto;padding:26px 20px 0">
+    <div ref="{{ formRef }}">
+      <sc-if value="{{ locked }}" hint-placeholder-val="{{ true }}">
+        <div aria-live="polite" style="position:relative;background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;overflow:hidden">
+          <div aria-hidden="true" style="filter:blur(6px);opacity:.5;pointer-events:none;user-select:none;padding:28px 24px;display:flex;flex-direction:column;gap:14px">
+            <div style="height:14px;width:180px;border-radius:6px;background:#E6EAF2"></div>
+            <div style="height:52px;border-radius:10px;border:1px solid #E6EAF2;background:#F5F7FB"></div>
+            <div style="height:52px;border-radius:10px;border:1px solid #E6EAF2;background:#F5F7FB"></div>
+            <div style="height:52px;border-radius:10px;border:1px solid #E6EAF2;background:#F5F7FB"></div>
+            <div style="height:52px;border-radius:10px;background:#C9D4FF"></div>
+          </div>
+          <div style="position:absolute;inset:0;background:rgba(255,255,255,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 22px">
+            <svg width="40" height="46" viewBox="0 0 40 46" fill="none" stroke="#2B4BF2" stroke-width="2" role="img" aria-label="Bloqueado"><path d="M11 20V13a9 9 0 0118 0v7" /><rect x="6" y="20" width="28" height="24" rx="5" fill="#EDF1FF" /><circle cx="20" cy="31" r="3" fill="#2B4BF2" stroke="none" /><path d="M20 34v4" /></svg>
+            <h2 style="margin:16px 0 0;font-size:clamp(21px,4.4vw,26px);font-weight:800;letter-spacing:-.02em">Reserva de llamada bloqueada</h2>
+            <p style="margin:10px 0 0;max-width:44ch;font-size:15.5px;color:#5A6478">Se desbloquea cuando termines el vídeo. Solo hablamos con gente que ya conoce el método.</p>
+            <div style="width:100%;max-width:420px;margin-top:20px;height:6px;border-radius:99px;background:#E6EAF2;overflow:hidden"><div style="{{ lockBarStyle }}"></div></div>
+            <p style="margin:12px 0 0;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:#2B4BF2">{{ countdown }}</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ unlocked }}">
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:clamp(22px,4vw,30px) clamp(20px,4vw,28px)">
+          <sc-if value="{{ justUnlocked }}">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:#EDF1FF;margin-bottom:20px;animation:fadeUp .45s ease both">
+              <svg width="24" height="26" viewBox="0 0 40 46" fill="none" stroke="#2B4BF2" stroke-width="2" aria-hidden="true" style="animation:unlockPop .6s ease both"><path d="M11 20V13a9 9 0 0118-1" /><rect x="6" y="20" width="28" height="24" rx="5" fill="#FFFFFF" /><circle cx="20" cy="31" r="3" fill="#2B4BF2" stroke="none" /></svg>
+              <span style="font-weight:700;color:#2B4BF2">Desbloqueado. Elige tu hueco.</span>
+            </div>
+          </sc-if>
+          <h2 style="margin:0;font-size:clamp(24px,4.8vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.1">Cinco preguntas<br /><span style="color:#2B4BF2">antes de elegir hueco.</span></h2>
+          <p style="margin:14px 0 0;max-width:58ch;font-size:16px;color:#5A6478">Nos sirven para llegar a la llamada sabiendo dónde se te rompe el proceso hoy. Y para no hacerte perder media hora si esto no es para ti.</p>
+
+          <sc-if value="{{ narrow }}">
+            <div style="margin-top:22px">
+              <div style="display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8A93AD">
+                <span>{{ stepLabel }}</span><span>{{ stepPct }}</span>
+              </div>
+              <div style="margin-top:8px;height:4px;border-radius:99px;background:#E6EAF2;overflow:hidden"><div style="{{ stepBarStyle }}"></div></div>
+            </div>
+          </sc-if>
+
+          <div style="display:flex;flex-direction:column;gap:28px;margin-top:26px">
+            <sc-for list="{{ visibleQs }}" as="q" hint-placeholder-count="1">
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2B4BF2">{{ q.num }}</div>
+                <label style="display:block;margin-top:8px;font-size:18px;font-weight:600;letter-spacing:-.01em;text-wrap:pretty">{{ q.label }}</label>
+                <sc-if value="{{ q.help }}">
+                  <p style="margin:6px 0 0;font-size:14px;color:#8A93AD">{{ q.help }}</p>
+                </sc-if>
+                <sc-if value="{{ q.isChoice }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+                    <sc-for list="{{ q.options }}" as="o" hint-placeholder-count="4">
+                      <button type="button" onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="{{ o.style }}">
+                        <span style="{{ o.mark }}"></span><span>{{ o.label }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ q.isText }}">
+                  <textarea rows="2" placeholder="Escríbelo en una o dos líneas" onChange="{{ q.onText }}" style="width:100%;margin-top:14px;padding:14px;font-size:16px;color:#101A3D;background:#FFFFFF;border:1px solid #E6EAF2;border-radius:10px;outline:none;resize:vertical" style-focus="border-color:#2B4BF2"></textarea>
+                </sc-if>
+                <sc-if value="{{ q.isContact }}">
+                  <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px">
+                    <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:500;color:#5A6478">Nombre
+                      <input type="text" placeholder="Tu nombre" style="width:100%;padding:15px 14px;font-size:16px;color:#101A3D;border:1px solid #E6EAF2;border-radius:10px;outline:none" style-focus="border-color:#2B4BF2" />
+                    </label>
+                    <label style="display:flex;flex-direction:column;gap:7px;font-size:13.5px;font-weight:500;color:#5A6478">WhatsApp
+                      <span style="display:flex;gap:8px">
+                        <select defaultValue="+34" style="flex:0 0 112px;padding:15px 8px;font-size:16px;color:#101A3D;border:1px solid #E6EAF2;border-radius:10px;outline:none">
+                          <option value="+34">🇪🇸 +34</option>
+                          <option value="+52">🇲🇽 +52</option>
+                          <option value="+54">🇦🇷 +54</option>
+                          <option value="+57">🇨🇴 +57</option>
+                          <option value="+56">🇨🇱 +56</option>
+                          <option value="+1">🇺🇸 +1</option>
+                        </select>
+                        <input type="tel" placeholder="600 000 000" style="flex:1 1 auto;min-width:0;padding:15px 14px;font-size:16px;color:#101A3D;border:1px solid #E6EAF2;border-radius:10px;outline:none" style-focus="border-color:#2B4BF2" />
+                      </span>
+                    </label>
+                    <label style="display:flex;gap:11px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:#5A6478;cursor:pointer">
+                      <input type="checkbox" required="true" style="flex:0 0 18px;width:18px;height:18px;margin:2px 0 0;accent-color:#2B4BF2" />
+                      <span>Acepto que me contactéis por WhatsApp y llamada, y acepto la política de privacidad.</span>
+                    </label>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:28px">
+            <sc-if value="{{ canGoBack }}">
+              <button type="button" onClick="{{ prevStep }}" style="flex:0 0 auto;height:56px;padding:0 20px;font-size:14px;font-weight:600;color:#5A6478;background:#FFFFFF;border:1px solid #E6EAF2;border-radius:10px;cursor:pointer">Atrás</button>
+            </sc-if>
+            <button type="button" onClick="{{ nextStep }}" style="flex:1 1 auto;height:56px;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#FFFFFF;background:#2B4BF2;border:none;border-radius:10px;cursor:pointer" style-hover="background:#1B39D6">{{ submitLabel }}</button>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <section style="margin-top:clamp(48px,8vw,88px);background:#F5F7FB;padding:clamp(44px,7vw,80px) 20px">
+    <div style="max-width:760px;margin:0 auto">
+      <h2 style="margin:0;font-size:clamp(26px,5.4vw,38px);line-height:1.1;letter-spacing:-.025em;font-weight:800;text-wrap:pretty">No es falta de esfuerzo.<br /><span style="color:#2B4BF2">Es que nadie te ha enseñado a decidir.</span></h2>
+      <p style="margin:20px 0 0;font-size:16.5px;color:#5A6478">Te han dado veinte indicadores y ninguna regla para elegir entre ellos. Te han vendido señales, que te dan una operación pero nunca un criterio. Y el día que por fin analizas bien, tardas tanto que llegas tarde a la entrada.</p>
+      <p style="margin:14px 0 0;font-size:16.5px;color:#5A6478">Así que abres una operación porque parece buena, no porque tengas un proceso que puedas repetir mañana. Y sin proceso repetible no hay rentabilidad, por muy bueno que sea tu análisis puntual.</p>
+      <p style="margin:26px 0 0;padding-left:18px;border-left:3px solid #2B4BF2;font-size:clamp(19px,3.4vw,23px);font-weight:700;letter-spacing:-.015em;line-height:1.35;text-wrap:pretty">Ser rentable no consiste en acertar más. Consiste en tener un método que aguante el mes malo.</p>
+    </div>
+  </section>
+
+  <section style="padding:clamp(44px,7vw,80px) 20px 0">
+    <div style="max-width:1000px;margin:0 auto">
+      <h2 style="margin:0;font-size:clamp(26px,5.4vw,38px);line-height:1.1;letter-spacing:-.025em;font-weight:800;text-wrap:pretty">El trabajo que te llevaba tres años aprender,<br /><span style="color:#2B4BF2">ahora lo hace la máquina.</span></h2>
+      <p style="margin:18px 0 0;max-width:62ch;font-size:16.5px;color:#5A6478">Lo que queda en tus manos es la decisión y el riesgo. Que resulta que es, exactamente, la parte que sí se aprende en semanas.</p>
+      <div style="margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+          <div style="height:120px;border-radius:12px;background:#F5F7FB;display:flex;align-items:center;justify-content:center">
+            <svg width="180" height="96" viewBox="0 0 180 96" fill="none" stroke="#101A3D" stroke-width="1.4" aria-hidden="true"><path d="M12 84h156" /><path d="M34 32v40" /><rect x="28" y="40" width="12" height="26" fill="#EDF1FF" /><path d="M62 24v52" /><rect x="56" y="34" width="12" height="34" fill="#2B4BF2" stroke="none" /><path d="M90 42v34" /><rect x="84" y="50" width="12" height="20" fill="#EDF1FF" /><rect x="48" y="18" width="30" height="60" stroke="#2B4BF2" stroke-dasharray="4 4" /><rect x="112" y="20" width="58" height="24" rx="6" fill="#FFFFFF" /><path d="M120 44l-6 10 12-4" fill="#FFFFFF" /><text x="120" y="36" font-family="IBM Plex Mono, monospace" font-size="10" fill="#2B4BF2" stroke="none">el mapa</text></svg>
+          </div>
+          <h3 style="margin:18px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">La IA analiza, tú decides</h3>
+          <p style="margin:0;font-size:15.5px;color:#5A6478">Estructura, niveles y contexto en segundos. No le pides que te diga qué hacer, eso sería volver a las señales con otra cara. Le pides el mapa, y decides tú con tus reglas.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+          <div style="height:120px;border-radius:12px;background:#F5F7FB;display:flex;align-items:center;justify-content:center">
+            <svg width="180" height="96" viewBox="0 0 180 96" fill="none" stroke="#101A3D" stroke-width="1.4" aria-hidden="true"><circle cx="48" cy="52" r="28" fill="#FFFFFF" /><path d="M48 24v-6M38 18h20M48 52l14-11" /><circle cx="48" cy="52" r="3" fill="#2B4BF2" stroke="none" /><rect x="96" y="46" width="72" height="12" rx="6" fill="#FFFFFF" /><rect x="96" y="46" width="44" height="12" rx="6" fill="#2B4BF2" stroke="none" /><text x="96" y="32" font-family="IBM Plex Mono, monospace" font-size="13" fill="#2B4BF2" stroke="none">40s</text><path d="M96 72h44" stroke="#C9D4FF" /></svg>
+          </div>
+          <h3 style="margin:18px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Un análisis completo en 40 segundos</h3>
+          <p style="margin:0;font-size:15.5px;color:#5A6478">No es el objetivo, es lo que hace posible el objetivo: operar una hora al día en lugar de cinco, y seguir llegando a tiempo a las entradas.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+          <div style="height:120px;border-radius:12px;background:#F5F7FB;display:flex;align-items:center;justify-content:center">
+            <svg width="180" height="96" viewBox="0 0 180 96" fill="none" stroke="#101A3D" stroke-width="1.4" aria-hidden="true"><rect x="20" y="20" width="60" height="56" rx="8" fill="#FFFFFF" /><rect x="32" y="34" width="36" height="28" fill="#2B4BF2" stroke="none" /><rect x="100" y="20" width="60" height="56" rx="8" fill="#F5F7FB" stroke="#C9D4FF" stroke-dasharray="4 4" /><path d="M112 34h36M112 46h24M112 58h30" stroke="#C9D4FF" /></svg>
+          </div>
+          <h3 style="margin:18px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Un solo activo, un solo horario</h3>
+          <p style="margin:0;font-size:15.5px;color:#5A6478">La rentabilidad sale de la repetición. Cien operaciones en el mismo mercado te enseñan más que saltar entre veinte.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+          <div style="height:120px;border-radius:12px;background:#F5F7FB;display:flex;align-items:center;justify-content:center">
+            <svg width="180" height="96" viewBox="0 0 180 96" fill="none" stroke="#101A3D" stroke-width="1.4" aria-hidden="true"><circle cx="54" cy="40" r="12" fill="#EDF1FF" /><circle cx="90" cy="34" r="12" fill="#EDF1FF" /><circle cx="126" cy="44" r="12" fill="#2B4BF2" stroke="none" /><path d="M40 76c4-12 14-18 28-18M76 76c4-14 16-20 28-20" /><path d="M66 40h12M102 38l12 4" stroke="#C9D4FF" /></svg>
+          </div>
+          <h3 style="margin:18px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Un entorno que te corrige</h3>
+          <p style="margin:0;font-size:15.5px;color:#5A6478">Operar solo es lo que más cuentas revienta. En grupo alguien ve el error que llevas repitiendo tres semanas, y te lo dice antes de que te cueste dinero.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:clamp(48px,8vw,88px);background:#F5F7FB;padding:clamp(44px,7vw,80px) 20px">
+    <div style="max-width:760px;margin:0 auto">
+      <h2 style="margin:0;font-size:clamp(26px,5.4vw,38px);line-height:1.1;letter-spacing:-.025em;font-weight:800;text-wrap:pretty">En Estados Unidos esto ya es normal.<br /><span style="color:#2B4BF2">En España casi nadie lo aplica todavía.</span></h2>
+      <p style="margin:20px 0 0;font-size:16.5px;color:#5A6478">Hasta hace dos años, analizar un gráfico con modelos de inteligencia artificial era cosa de mesas institucionales. Hoy cualquier particular tiene esa capacidad en una pestaña del navegador, y en el mercado americano la adopción ya está hecha.</p>
+      <p style="margin:14px 0 0;font-size:16.5px;color:#5A6478">España va con año y medio de retraso. Esa diferencia de tiempo es exactamente tu ventaja, y no va a durar.</p>
+    </div>
+  </section>
+
+  <section style="padding:clamp(44px,7vw,80px) 20px 0">
+    <div style="max-width:1000px;margin:0 auto">
+      <h2 style="margin:0;font-size:clamp(26px,5.4vw,38px);line-height:1.1;letter-spacing:-.025em;font-weight:800">Tenían las mismas dudas<br /><span style="color:#2B4BF2">que tú.</span></h2>
+      <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+        <div style="border:1px dashed #C9D4FF;border-radius:16px;background:#F5F7FB;padding:24px;min-height:180px;display:flex;flex-direction:column;justify-content:center;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#2B4BF2">POR RELLENAR</span>
+          <span style="font-weight:700">Testimonio en texto</span>
+          <span style="font-size:14.5px;color:#5A6478">Cita real + nombre y ciudad del alumno.</span>
+        </div>
+        <div style="border:1px dashed #C9D4FF;border-radius:16px;background:#F5F7FB;padding:24px;min-height:180px;display:flex;flex-direction:column;justify-content:center;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#2B4BF2">POR RELLENAR</span>
+          <span style="font-weight:700">Captura de mensaje</span>
+          <span style="font-size:14.5px;color:#5A6478">Captura real de WhatsApp o del grupo.</span>
+        </div>
+        <div style="border:1px dashed rgba(255,255,255,.5);border-radius:16px;background:#2B4BF2;color:#FFFFFF;padding:24px;min-height:180px;display:flex;flex-direction:column;justify-content:center;gap:8px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:rgba(255,255,255,.8)">POR RELLENAR</span>
+          <span style="font-weight:700">Cita destacada</span>
+          <span style="font-size:14.5px;color:rgba(255,255,255,.8)">La frase más fuerte, en tarjeta azul.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:clamp(48px,8vw,88px);background:#F5F7FB;padding:clamp(44px,7vw,80px) 20px">
+    <div style="max-width:820px;margin:0 auto">
+      <h2 style="margin:0;font-size:clamp(26px,5.4vw,38px);line-height:1.1;letter-spacing:-.025em;font-weight:800">No es una llamada de ventas.<br /><span style="color:#2B4BF2">Es una llamada de cualificación.</span></h2>
+      <div style="margin-top:28px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2B4BF2">01</span>
+          <h3 style="margin:8px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Miramos por qué no eres rentable hoy</h3>
+          <p style="margin:0;font-size:15.5px;color:#5A6478">Capital, tiempo disponible, qué has probado y en qué punto se te rompe el proceso. Sin esos datos no podemos decirte nada útil.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2B4BF2">02</span>
+          <h3 style="margin:8px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Te decimos si encajas o no</h3>
+          <p style="margin:0;font-size:15.5px;color:#5A6478">Si el sistema encaja con tu caso, te explicamos exactamente cómo funciona el programa. Si no encaja, te lo decimos igual y la llamada se acaba ahí.</p>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2B4BF2">03</span>
+          <h3 style="margin:8px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Sales con un diagnóstico, decidas lo que decidas</h3>
+          <p style="margin:0;font-size:15.5px;color:#5A6478">Aunque no acabemos trabajando juntos, sales sabiendo qué es lo primero que tienes que corregir.</p>
+        </div>
+      </div>
+      <p style="margin:26px 0 0;text-align:center;font-size:16.5px;font-weight:600;text-wrap:pretty">No presionamos a nadie, sencillamente porque no cogemos a todo el mundo: abrimos diez plazas al mes.</p>
+    </div>
+  </section>
+
+  <section style="padding:clamp(44px,7vw,80px) 20px 0">
+    <div style="max-width:1000px;margin:0 auto">
+      <h2 style="margin:0;font-size:clamp(26px,5.4vw,38px);line-height:1.1;letter-spacing:-.025em;font-weight:800">Esto no es para<br /><span style="color:#2B4BF2">todo el mundo.</span></h2>
+      <div style="margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+        <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+          <span style="display:inline-block;padding:6px 12px;border-radius:99px;background:#FDECEC;color:#D9382C;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em">NO ES PARA TI SI</span>
+          <ul style="list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:14px">
+            <li style="display:flex;gap:12px;align-items:flex-start"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#D9382C" stroke-width="1.6" aria-hidden="true" style="flex:0 0 18px;margin-top:5px"><path d="M3 3l12 12M15 3L3 15" /></svg><span style="font-size:15.5px;color:#5A6478">Buscas señales para copiar sin entender qué hay detrás.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#D9382C" stroke-width="1.6" aria-hidden="true" style="flex:0 0 18px;margin-top:5px"><path d="M3 3l12 12M15 3L3 15" /></svg><span style="font-size:15.5px;color:#5A6478">Esperas resultados garantizados o dinero rápido sin trabajo.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#D9382C" stroke-width="1.6" aria-hidden="true" style="flex:0 0 18px;margin-top:5px"><path d="M3 3l12 12M15 3L3 15" /></svg><span style="font-size:15.5px;color:#5A6478">No puedes dedicar al menos una hora al día, siempre en la misma franja.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#D9382C" stroke-width="1.6" aria-hidden="true" style="flex:0 0 18px;margin-top:5px"><path d="M3 3l12 12M15 3L3 15" /></svg><span style="font-size:15.5px;color:#5A6478">Quieres empezar con un dinero que no te puedes permitir perder.</span></li>
+          </ul>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #C9D4FF;border-radius:16px;padding:24px">
+          <span style="display:inline-block;padding:6px 12px;border-radius:99px;background:#EDF1FF;color:#2B4BF2;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em">SÍ ES PARA TI SI</span>
+          <ul style="list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:14px">
+            <li style="display:flex;gap:12px;align-items:flex-start"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#2B4BF2" stroke-width="1.6" aria-hidden="true" style="flex:0 0 18px;margin-top:5px"><path d="M3 9.5l4 4L15 5" /></svg><span style="font-size:15.5px">Ya has operado y sabes lo que es perder por una decisión impulsiva.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#2B4BF2" stroke-width="1.6" aria-hidden="true" style="flex:0 0 18px;margin-top:5px"><path d="M3 9.5l4 4L15 5" /></svg><span style="font-size:15.5px">Estás cansado de que el resultado dependa de la suerte del mes.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#2B4BF2" stroke-width="1.6" aria-hidden="true" style="flex:0 0 18px;margin-top:5px"><path d="M3 9.5l4 4L15 5" /></svg><span style="font-size:15.5px">Puedes dedicar una hora al día a operar con método.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#2B4BF2" stroke-width="1.6" aria-hidden="true" style="flex:0 0 18px;margin-top:5px"><path d="M3 9.5l4 4L15 5" /></svg><span style="font-size:15.5px">Quieres entender la herramienta, no que alguien te diga dónde entrar.</span></li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin:26px 0 0;text-align:center;font-size:17px;font-weight:700;letter-spacing:-.01em">¿Te reconoces a la derecha? Reserva tu llamada.</p>
+    </div>
+  </section>
+
+  <section style="padding:clamp(44px,7vw,80px) 20px 0">
+    <div style="max-width:820px;margin:0 auto">
+      <h2 style="margin:0 0 26px;font-size:clamp(26px,5.4vw,38px);line-height:1.1;letter-spacing:-.025em;font-weight:800">Todo lo que quieres saber<br /><span style="color:#2B4BF2">antes de dar el paso.</span></h2>
+      <div style="border-top:1px solid #E6EAF2">
+        <sc-for list="{{ faqs }}" as="item" hint-placeholder-count="8">
+          <div style="border-bottom:1px solid #E6EAF2">
+            <button type="button" onClick="{{ item.toggle }}" aria-expanded="{{ item.open }}" style="width:100%;display:flex;gap:16px;align-items:center;justify-content:space-between;text-align:left;padding:20px 0;background:none;border:none;color:#101A3D;font-size:17px;font-weight:600;letter-spacing:-.01em;cursor:pointer">
+              <span>{{ item.q }}</span>
+              <span style="{{ item.chev }}"><svg width="14" height="9" viewBox="0 0 14 9" fill="none" stroke="#2B4BF2" stroke-width="1.6" aria-hidden="true"><path d="M1 1l6 6 6-6" /></svg></span>
+            </button>
+            <sc-if value="{{ item.open }}">
+              <p style="margin:0;padding:0 0 22px;font-size:16px;color:#5A6478;max-width:66ch">{{ item.a }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:clamp(48px,8vw,88px);background:#2B4BF2;color:#FFFFFF;padding:clamp(48px,7vw,88px) 20px">
+    <div style="max-width:820px;margin:0 auto;text-align:center">
+      <h2 style="margin:0;font-size:clamp(28px,6vw,44px);line-height:1.08;letter-spacing:-.025em;font-weight:800">La IA ya salió de Wall Street.</h2>
+      <p style="margin:18px auto 0;max-width:56ch;font-size:16.5px;color:rgba(255,255,255,.82)">La pregunta ya no es si vas a operar con ella. Es si vas a hacerlo antes o después que el resto del mercado español.</p>
+      <button type="button" onClick="{{ finalCta }}" style="{{ finalCtaStyle }}">{{ finalCtaLabel }}</button>
+      <p style="margin:14px 0 0;font-size:13px;color:rgba(255,255,255,.72)">Diez plazas al mes · Respuesta en menos de 24 horas</p>
+    </div>
+  </section>
+
+  <footer style="background:#F5F7FB;padding:32px 20px 40px">
+    <div style="max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13.5px;color:#5A6478">
+        <span>© 2026 [MARCA]</span><span>Aviso legal</span><span>Política de privacidad</span><span>Política de cookies</span>
+      </div>
+      <p style="margin:0;font-size:11.5px;line-height:1.7;color:#8A93AD;max-width:96ch">El trading conlleva riesgo de pérdida. Esta formación no constituye asesoramiento financiero ni recomendación de inversión. Los resultados dependen de cada persona y no están garantizados.</p>
+    </div>
+  </footer>
+</div>
+</sc-if>
+
+<sc-if value="{{ isNoMatch }}">
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px">
+  <div style="max-width:620px;background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:clamp(26px,5vw,40px)">
+    <h1 style="margin:0;font-size:clamp(26px,5vw,36px);line-height:1.1;letter-spacing:-.025em;font-weight:800;text-wrap:pretty">Todavía no es tu momento para el acompañamiento,<br /><span style="color:#2B4BF2">y no pasa nada.</span></h1>
+    <p style="margin:20px 0 0;font-size:16.5px;color:#5A6478">El programa completo incluye seguimiento directo, y eso solo tiene sentido si estás en condiciones de aprovecharlo. Mientras tanto, puedes empezar por tu cuenta con [NOMBRE DEL MID TICKET]: es el mismo método, sin el acompañamiento. Cuando estés listo, hablamos.</p>
+    <p style="margin:26px 0 0;font-size:11.5px;color:#8A93AD">El trading conlleva riesgo de pérdida. Esta formación no constituye asesoramiento financiero ni recomendación de inversión. Los resultados dependen de cada persona y no están garantizados.</p>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isGracias }}">
+<div style="padding-bottom:60px">
+  <!-- PÍXELES DE CONVERSIÓN: Meta Pixel (Schedule) y GA4 van aquí -->
+  <header style="border-bottom:1px solid #E6EAF2">
+    <div style="max-width:1120px;margin:0 auto;padding:14px 20px;display:flex;align-items:center">
+      <span style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.02em">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect width="22" height="22" rx="6" fill="#2B4BF2" /><path d="M6 15l3.5-4 2.5 2.5L16 7" stroke="#FFFFFF" stroke-width="1.8" /></svg>[MARCA]
+      </span>
+    </div>
+  </header>
+  <section style="max-width:820px;margin:0 auto;padding:clamp(36px,6vw,64px) 20px 0">
+    <h1 style="margin:0;font-size:clamp(30px,6vw,46px);line-height:1.08;letter-spacing:-.025em;font-weight:800">Tu llamada<br /><span style="color:#2B4BF2">está reservada.</span></h1>
+    <p style="margin:18px 0 0;max-width:58ch;font-size:16.5px;color:#5A6478">Te acabamos de mandar la confirmación por WhatsApp. Tres cosas antes de que nos veamos.</p>
+    <div style="margin-top:28px;display:flex;flex-direction:column;gap:14px">
+      <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2B4BF2">01</span>
+        <h3 style="margin:8px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Guarda la llamada en tu calendario</h3>
+        <p style="margin:0;font-size:15.5px;color:#5A6478">Tienes el enlace en la confirmación. Añádelo ahora, no dentro de un rato.</p>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2B4BF2">02</span>
+        <h3 style="margin:8px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Ten a mano dos datos</h3>
+        <p style="margin:0;font-size:15.5px;color:#5A6478">Cuánto capital tienes disponible y en qué franja horaria puedes operar. Son las dos cosas que determinan si esto encaja contigo.</p>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E6EAF2;border-radius:16px;padding:24px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:#2B4BF2">03</span>
+        <h3 style="margin:8px 0 8px;font-size:19px;font-weight:700;letter-spacing:-.01em">Trae tu peor duda</h3>
+        <p style="margin:0;font-size:15.5px;color:#5A6478">La pregunta incómoda, la que te frena de verdad. Es la que más nos interesa contestar.</p>
+      </div>
+    </div>
+    <p style="margin:26px 0 0;font-size:16px;color:#5A6478;max-width:62ch">Si te surge algo y no puedes asistir, avísanos por WhatsApp y la movemos. Solo hacemos diez llamadas al mes, y hay gente esperando hueco.</p>
+    <p style="margin:32px 0 0;font-size:11.5px;line-height:1.7;color:#8A93AD;max-width:96ch">El trading conlleva riesgo de pérdida. Esta formación no constituye asesoramiento financiero ni recomendación de inversión. Los resultados dependen de cada persona y no están garantizados.</p>
+  </section>
+</div>
+</sc-if>
+
+<sc-if value="{{ showMini }}">
+  <div style="{{ miniStyle }}">
+    <div style="width:96px;flex:0 0 96px;aspect-ratio:16/9;border-radius:8px;background:repeating-linear-gradient(135deg,#F8FAFF 0 8px,#F5F7FB 8px 16px)"></div>
+    <div style="flex:1 1 auto;min-width:0">
+      <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Método IA · 24 min</div>
+      <div style="margin-top:6px;height:4px;border-radius:99px;background:#E6EAF2;overflow:hidden"><div style="{{ barStyle }}"></div></div>
+    </div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8A93AD;flex:0 0 auto">{{ clock }}</span>
+    <button type="button" onClick="{{ toggle }}" style="flex:0 0 auto;padding:8px 12px;font-size:12.5px;font-weight:600;color:#FFFFFF;background:#2B4BF2;border:none;border-radius:8px;cursor:pointer">{{ playLabel }}</button>
+  </div>
+</sc-if>
+
+<sc-if value="{{ showStickyBar }}">
+  <div style="position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 14px;background:#FFFFFF;border-top:1px solid #E6EAF2">
+    <button type="button" onClick="{{ stickyAction }}" aria-live="polite" style="{{ stickyStyle }}">
+      <sc-if value="{{ locked }}" hint-placeholder-val="{{ true }}">
+        <svg width="16" height="18" viewBox="0 0 40 46" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M11 20V13a9 9 0 0118 0v7" /><rect x="6" y="20" width="28" height="24" rx="5" /></svg>
+      </sc-if>
+      <span>{{ stickyLabel }}</span>
+    </button>
+  </div>
+</sc-if>
+
+<sc-if value="{{ cookies }}">
+  <div style="{{ cookieStyle }}">
+    <p style="margin:0;flex:1 1 240px;font-size:12.5px;color:#5A6478">Usamos cookies para medir el rendimiento de nuestras campañas.</p>
+    <span style="display:flex;gap:8px;flex:0 0 auto">
+      <button type="button" onClick="{{ hideCookies }}" style="padding:9px 14px;font-size:12.5px;color:#5A6478;background:none;border:1px solid #E6EAF2;border-radius:8px;cursor:pointer">Rechazar</button>
+      <button type="button" onClick="{{ hideCookies }}" style="padding:9px 14px;font-size:12.5px;font-weight:600;color:#FFFFFF;background:#2B4BF2;border:none;border-radius:8px;cursor:pointer">Aceptar</button>
+    </span>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;unlockAtSeconds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1350,&quot;min&quot;:0,&quot;max&quot;:1440,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Vídeo&quot;},&quot;videoDurationSeconds&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1440,&quot;min&quot;:60,&quot;max&quot;:7200,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Vídeo&quot;},&quot;previewSpeed&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:300,&quot;unit&quot;:&quot;x&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Vídeo&quot;}}">
+// Umbral de desbloqueo: prop unlockAtSeconds (por defecto 1350 s = 22:30).
+// Duración: prop videoDurationSeconds (1440 s = 24:00).
+// previewSpeed multiplica el reloj SOLO para poder revisar la página sin esperar 22 minutos.
+const STORE_KEY = 'vsl_progress_v1';
+
+class Component extends DCLogic {
+  state = {
+    page: 'landing', t: 0, playing: false, started: false,
+    unlocked: false, justUnlocked: false,
+    step: 0, answers: {}, faq: 0, cookies: true,
+    wide: true, pastPlayer: false
+  };
+
+  componentDidMount() {
+    // Persistencia de progreso en localStorage (si el navegador lo bloquea, se ignora sin romper nada).
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (typeof s.t === 'number') {
+          this.setState({ t: s.t, started: s.t > 0, unlocked: s.t >= this.unlockAt() });
+        }
+      }
+    } catch (e) {}
+
+    this.sync = () => this.setState({ wide: window.innerWidth >= 900 });
+    this.onScroll = () => {
+      const el = this.player;
+      if (!el) return;
+      const past = el.getBoundingClientRect().bottom < 0;
+      if (past !== this.state.pastPlayer) this.setState({ pastPlayer: past });
+    };
+    this.sync();
+    window.addEventListener('resize', this.sync);
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.sync);
+    window.removeEventListener('scroll', this.onScroll);
+    if (this.iv) clearInterval(this.iv);
+  }
+
+  unlockAt() { return this.props.unlockAtSeconds ?? 1350; }
+  duration() { return this.props.videoDurationSeconds ?? 1440; }
+
+  tick() {
+    if (this.iv) clearInterval(this.iv);
+    this.iv = setInterval(() => {
+      const speed = this.props.previewSpeed ?? 1;
+      this.setState(s => {
+        const t = Math.min(this.duration(), s.t + speed);
+        try { localStorage.setItem(STORE_KEY, JSON.stringify({ t })); } catch (e) {}
+        if (!s.unlocked && t >= this.unlockAt()) {
+          setTimeout(() => this.scrollToForm(), 260);
+          return { t, unlocked: true, justUnlocked: true };
+        }
+        if (t >= this.duration()) { clearInterval(this.iv); return { t, playing: false }; }
+        return { t };
+      });
+    }, 1000);
+  }
+
+  scrollToForm() {
+    const el = this.form;
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+
+  fmt(s) {
+    const m = Math.floor(s / 60), r = Math.floor(s % 60);
+    return m + ':' + (r < 10 ? '0' : '') + r;
+  }
+
+  renderVals() {
+    const st = this.state;
+    const dur = this.duration();
+    const unlockAt = this.unlockAt();
+    const pct = Math.min(100, (st.t / dur) * 100);
+    const lockPct = Math.min(100, (st.t / unlockAt) * 100);
+    const remain = Math.max(0, unlockAt - st.t);
+    const mins = Math.ceil(remain / 60);
+
+    const qDefs = [
+      { id: 'q1', label: '¿Cuánto tiempo llevas operando?', options: ['Nunca he operado', 'Menos de 6 meses', 'Entre 6 meses y 2 años', 'Más de 2 años'] },
+      { id: 'q2', label: '¿Cómo describirías tus resultados hasta ahora?', options: ['En pérdidas', 'Más o menos en cero', 'Gano algunos meses y pierdo otros', 'Rentable de forma constante'] },
+      { id: 'q3', label: '¿Qué has probado ya?', help: 'Puedes elegir varias.', multi: true, options: ['Grupos de señales', 'Formaciones online', 'Prop firms', 'Aprender por mi cuenta', 'Nada todavía'] },
+      { id: 'q4', label: '¿Con qué capital cuentas hoy para operar?', help: 'Dinero que puedes permitirte arriesgar, no tus ahorros totales.', options: ['Menos de 500 €', 'Entre 500 € y 2.000 €', 'Entre 2.000 € y 5.000 €', 'Más de 5.000 €'] },
+      { id: 'q5', label: '¿Cuánto tiempo puedes dedicarle al día?', options: ['Menos de 30 minutos', 'Entre 30 minutos y 1 hora', 'Más de 1 hora'] },
+      { id: 'q6', label: 'Si en la llamada vemos que esto encaja contigo, ¿estarías en disposición de invertir en tu formación?', options: ['Sí, si me convence', 'Sí, pero necesitaría pago fraccionado', 'No en este momento'] },
+      { id: 'q7', label: '¿Qué cambiaría en tu vida si el trading empezara a funcionarte?', text: true },
+      { id: 'contact', label: 'Tus datos de contacto', contact: true }
+    ];
+
+    const pick = (q, label) => () => this.setState(s => {
+      const a = Object.assign({}, s.answers);
+      if (q.multi) {
+        const cur = a[q.id] || [];
+        a[q.id] = cur.indexOf(label) > -1 ? cur.filter(x => x !== label) : cur.concat([label]);
+      } else {
+        a[q.id] = label;
+      }
+      return { answers: a };
+    });
+
+    const qs = qDefs.map((q, i) => ({
+      num: q.contact ? 'DATOS' : String(i + 1).padStart(2, '0'),
+      label: q.label, help: q.help || null,
+      isChoice: !!q.options, isText: !!q.text, isContact: !!q.contact,
+      onText: (e) => { const v = e.target.value; this.setState(s => ({ answers: Object.assign({}, s.answers, { q7: v }) })); },
+      options: (q.options || []).map(label => {
+        const cur = st.answers[q.id];
+        const on = q.multi ? (cur || []).indexOf(label) > -1 : cur === label;
+        return {
+          label, on, pick: pick(q, label),
+          style: 'display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:15px 16px;font-size:16px;cursor:pointer;border-radius:10px;background:' +
+            (on ? '#EDF1FF' : '#FFFFFF') + ';border:1px solid ' + (on ? '#2B4BF2' : '#E6EAF2') +
+            ';color:#101A3D;font-weight:' + (on ? '600' : '400'),
+          mark: 'flex:0 0 18px;width:18px;height:18px;border-radius:' + (q.multi ? '5px' : '50%') +
+            ';border:1px solid ' + (on ? '#2B4BF2' : '#C9D4FF') + ';background:' + (on ? '#2B4BF2' : '#FFFFFF') +
+            ';box-shadow:' + (on ? 'inset 0 0 0 3px #FFFFFF' : 'none')
+        };
+      })
+    }));
+
+    const total = qs.length;
+    const step = Math.min(st.step, total - 1);
+    const visibleQs = st.wide ? qs : [qs[step]];
+    const lastStep = step === total - 1;
+
+    const submit = () => {
+      if (st.answers.q6 === 'No en este momento') { this.setState({ page: 'nomatch' }); }
+      else { this.setState({ page: 'gracias' }); }
+      window.scrollTo(0, 0);
+    };
+
+    const faqData = [
+      ['¿En cuánto tiempo puedo ser rentable?', 'Te lo decimos claro: nadie vive del trading en dos semanas, y nadie lo hace con una cuenta de 200 euros. Lo que sí es realista en 60 días es tener un proceso que funcione, unas reglas claras y una rutina que puedas sostener. A partir de ahí, lo que crezca la cuenta depende de tu capital, tu disciplina y el tiempo que le dediques. Eso ya no lo decide el método.'],
+      ['¿Cuánto cuesta el programa?', 'Te lo decimos en la llamada, con total transparencia. No tiene sentido darte un precio antes de saber si el sistema encaja contigo. Lo que sí te podemos decir ahora: es una formación con acompañamiento, no una suscripción de señales, y hay pago fraccionado disponible.'],
+      ['¿Me vais a vender por teléfono?', 'Te vamos a decir si encajas. Si encajas, te explicamos el programa y decides tú. Si no encajas, te lo decimos y colgamos. No insistimos y no volvemos a llamar.'],
+      ['¿Cuánto capital necesito?', 'Hay un mínimo por debajo del cual esto no tiene sentido, y te lo decimos en la llamada. Es bastante menos de lo que la gente imagina, pero no es cero. Si estás muy por debajo, te lo diremos: es mejor esperar dos meses que empezar mal.'],
+      ['¿Necesito experiencia previa?', 'No hace falta ser experto. Ayuda haber operado alguna vez, aunque haya salido mal. Quien viene sin malos hábitos suele avanzar más rápido.'],
+      ['¿Es una sala de señales?', 'No. Si mañana desaparecemos, tú sigues sabiendo operar. Ese es literalmente el criterio para distinguir una formación de una suscripción a la dependencia.'],
+      ['¿Cuánto dura la llamada?', 'Treinta minutos.'],
+      ['¿Y si al final no puedo asistir?', 'Avísanos y la movemos. Si no avisas, la plaza pasa a la siguiente persona.']
+    ];
+    const faqs = faqData.map((d, i) => {
+      const open = st.faq === i;
+      return {
+        q: d[0], a: d[1], open,
+        chev: 'display:flex;flex:0 0 auto;transition:transform .2s ease;transform:rotate(' + (open ? '180deg' : '0deg') + ')',
+        toggle: () => this.setState(s => ({ faq: s.faq === i ? null : i }))
+      };
+    });
+
+    const play = () => { this.setState({ playing: true, started: true }); this.tick(); };
+    const toggle = () => {
+      if (st.playing) { clearInterval(this.iv); this.setState({ playing: false }); }
+      else { play(); }
+    };
+
+    return {
+      isLanding: st.page === 'landing', isGracias: st.page === 'gracias', isNoMatch: st.page === 'nomatch',
+      playerRef: (el) => { this.player = el; }, formRef: (el) => { this.form = el; },
+      showPoster: !st.started, started: st.started,
+      clock: this.fmt(st.t), playLabel: st.playing ? 'Pausa' : 'Reproducir',
+      play, toggle,
+      back10: () => this.setState(s => ({ t: Math.max(0, s.t - 10) })),
+      barStyle: 'width:' + pct + '%;height:100%;background:#2B4BF2;transition:width .4s linear',
+      lockBarStyle: 'width:' + lockPct + '%;height:100%;background:#2B4BF2;border-radius:99px;transition:width .4s linear',
+      locked: !st.unlocked, unlocked: st.unlocked, justUnlocked: st.justUnlocked,
+      countdown: remain > 0 ? 'Se desbloquea en ' + mins + ' min' : 'Desbloqueando...',
+      narrow: !st.wide, visibleQs,
+      stepLabel: 'Pregunta ' + (step + 1) + ' de ' + total,
+      stepPct: Math.round(((step + 1) / total) * 100) + '%',
+      stepBarStyle: 'width:' + (((step + 1) / total) * 100) + '%;height:100%;background:#2B4BF2;transition:width .3s ease',
+      canGoBack: !st.wide && step > 0,
+      prevStep: () => this.setState(s => ({ step: Math.max(0, s.step - 1) })),
+      nextStep: () => { if (st.wide || lastStep) submit(); else this.setState(s => ({ step: s.step + 1 })); },
+      submitLabel: (st.wide || lastStep) ? 'Ver huecos disponibles' : 'Siguiente',
+      faqs,
+      finalCta: st.unlocked ? () => this.scrollToForm() : () => {
+        const el = this.player;
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' });
+      },
+      finalCtaLabel: st.unlocked ? 'Reservar mi llamada' : 'Bloqueado · volver al vídeo',
+      finalCtaStyle: 'width:100%;max-width:360px;height:60px;margin-top:28px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:10px;cursor:pointer;border:none;background:' +
+        (st.unlocked ? '#FFFFFF' : 'rgba(255,255,255,.22)') + ';color:' + (st.unlocked ? '#2B4BF2' : '#FFFFFF'),
+      showMini: st.page === 'landing' && st.started && st.pastPlayer,
+      miniStyle: st.wide
+        ? 'position:fixed;right:20px;bottom:20px;z-index:55;width:340px;display:flex;align-items:center;gap:12px;padding:12px;background:#FFFFFF;border:1px solid #E6EAF2;border-radius:14px;box-shadow:0 10px 34px rgba(16,26,61,.12)'
+        : 'position:fixed;left:0;right:0;bottom:76px;z-index:55;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#FFFFFF;border-top:1px solid #E6EAF2',
+      showStickyBar: st.page === 'landing' && !st.wide,
+      stickyLabel: st.unlocked ? 'Reservar mi llamada' : (remain > 0 ? 'Bloqueado · ' + mins + ' min' : 'Desbloqueando...'),
+      stickyAction: st.unlocked ? () => this.scrollToForm() : () => {
+        const el = this.player;
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' });
+      },
+      stickyStyle: 'width:100%;height:56px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:10px;border:none;cursor:pointer;background:' +
+        (st.unlocked ? '#2B4BF2' : '#EDEFF5') + ';color:' + (st.unlocked ? '#FFFFFF' : '#8A93AD'),
+      cookies: st.cookies,
+      cookieStyle: 'position:fixed;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px;background:#FFFFFF;border:1px solid #E6EAF2;border-radius:12px;box-shadow:0 8px 28px rgba(16,26,61,.1);' +
+        (st.wide ? 'left:20px;bottom:20px;max-width:420px' : 'left:12px;right:12px;bottom:144px'),
+      hideCookies: () => this.setState({ cookies: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

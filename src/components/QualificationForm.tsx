@@ -1,15 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { questions, type Question } from "@/config/questions";
 import { getAttribution } from "@/lib/attribution";
 
-type Props = {
-  /** Appelé une fois le lead enregistré : la page passe alors au calendrier. */
-  onQualified: (answers: Record<string, string>) => void;
-};
-
-export function QualificationForm({ onQualified }: Props) {
+/**
+ * Questionnaire de l'étape 3, une question par écran.
+ * Les coordonnées viennent de l'opt-in (sessionStorage) et sont renvoyées
+ * avec la candidature pour que Gabriel ait une fiche complète.
+ */
+export function QualificationForm() {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
@@ -17,8 +19,6 @@ export function QualificationForm({ onQualified }: Props) {
 
   const question = questions[step];
   const isLast = step === questions.length - 1;
-  const progress = Math.round((step / questions.length) * 100);
-
   const value = answers[question.id] ?? "";
   const canContinue = useMemo(
     () => validate(question, value) === null,
@@ -36,7 +36,6 @@ export function QualificationForm({ onQualified }: Props) {
       setError(problem);
       return;
     }
-
     if (!isLast) {
       setStep((s) => s + 1);
       return;
@@ -48,46 +47,46 @@ export function QualificationForm({ onQualified }: Props) {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ answers, attribution: getAttribution() }),
+        body: JSON.stringify({
+          stage: "solicitud",
+          answers: { ...readOptin(), ...answers },
+          attribution: getAttribution(),
+        }),
       });
       if (!res.ok) throw new Error(String(res.status));
-      onQualified(answers);
+      router.push("/gracias");
     } catch {
       setError("No hemos podido enviar tus respuestas. Inténtalo de nuevo.");
-    } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <div className="mx-auto w-full max-w-xl">
-      <div className="mb-8 h-1 w-full overflow-hidden rounded-full bg-white/10">
+    <div className="mt-7 rounded-[20px] border border-line bg-white p-7 shadow-[0_4px_24px_rgba(11,21,51,.06)] sm:p-10">
+      <div className="mb-7 h-1 w-full overflow-hidden rounded-full bg-chip">
         <div
-          className="h-full rounded-full bg-current transition-all duration-300"
-          style={{ width: `${progress}%` }}
+          className="h-full rounded-full bg-brand transition-all duration-300"
+          style={{ width: `${((step + 1) / questions.length) * 100}%` }}
         />
       </div>
 
-      <p className="mb-2 text-xs uppercase tracking-wider opacity-50">
+      <p className="m-0 font-mono text-[11px] uppercase tracking-[0.12em] text-faint">
         Pregunta {step + 1} de {questions.length}
       </p>
 
-      <h2 className="mb-2 text-2xl font-semibold">{question.label}</h2>
+      <h2 className="mb-0 mt-3 text-[clamp(20px,2.6vw,26px)] font-bold leading-tight tracking-[-0.01em] text-pretty">
+        {question.label}
+      </h2>
       {question.help && (
-        <p className="mb-6 text-sm opacity-60">{question.help}</p>
+        <p className="mt-2 text-[15px] text-muted">{question.help}</p>
       )}
 
       <div className="mt-6">
-        <QuestionField
-          question={question}
-          value={value}
-          onChange={setValue}
-          onEnter={goNext}
-        />
+        <Field question={question} value={value} onChange={setValue} />
       </div>
 
       {error && (
-        <p role="alert" className="mt-4 text-sm text-red-400">
+        <p role="alert" className="mt-4 text-sm text-danger">
           {error}
         </p>
       )}
@@ -97,7 +96,7 @@ export function QualificationForm({ onQualified }: Props) {
           <button
             type="button"
             onClick={() => setStep((s) => s - 1)}
-            className="rounded-lg px-4 py-3 text-sm opacity-60 transition hover:opacity-100"
+            className="cursor-pointer rounded-xl border border-line bg-transparent px-5 py-3.5 text-sm font-medium text-muted"
           >
             Atrás
           </button>
@@ -106,25 +105,23 @@ export function QualificationForm({ onQualified }: Props) {
           type="button"
           onClick={goNext}
           disabled={!canContinue || submitting}
-          className="flex-1 rounded-lg bg-white px-6 py-3 font-semibold text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+          className="h-15 flex-1 cursor-pointer rounded-xl border-none bg-brand text-[15px] font-bold uppercase tracking-[0.06em] text-white shadow-[0_4px_24px_rgba(43,79,240,.24)] transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {submitting ? "Enviando..." : isLast ? "Ver horarios disponibles" : "Continuar"}
+          {submitting ? "Enviando..." : isLast ? "Enviar solicitud" : "Continuar"}
         </button>
       </div>
     </div>
   );
 }
 
-function QuestionField({
+function Field({
   question,
   value,
   onChange,
-  onEnter,
 }: {
   question: Question;
   value: string;
   onChange: (v: string) => void;
-  onEnter: () => void;
 }) {
   if (question.kind === "choice") {
     return (
@@ -137,10 +134,10 @@ function QuestionField({
               type="button"
               onClick={() => onChange(option.value)}
               aria-pressed={selected}
-              className={`rounded-lg border px-5 py-4 text-left transition ${
+              className={`cursor-pointer rounded-xl border px-5 py-4 text-left text-[16px] transition-colors ${
                 selected
-                  ? "border-white bg-white/10"
-                  : "border-white/15 hover:border-white/40"
+                  ? "border-brand bg-brand-tint text-ink"
+                  : "border-line bg-white text-ink hover:border-brand-line"
               }`}
             >
               {option.label}
@@ -151,41 +148,24 @@ function QuestionField({
     );
   }
 
-  if (question.kind === "longtext") {
-    return (
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={question.placeholder}
-        rows={4}
-        className="w-full rounded-lg border border-white/15 bg-transparent px-4 py-3 outline-none transition focus:border-white"
-      />
-    );
-  }
-
   return (
-    <input
-      type={question.kind}
+    <textarea
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          onEnter();
-        }
-      }}
       placeholder={question.placeholder}
-      autoComplete={autoCompleteFor(question)}
-      className="w-full rounded-lg border border-white/15 bg-transparent px-4 py-3 outline-none transition focus:border-white"
+      rows={4}
+      className="w-full rounded-xl border border-line bg-white px-3.5 py-3 text-base text-ink outline-none transition-colors focus:border-brand"
     />
   );
 }
 
-function autoCompleteFor(question: Question) {
-  if (question.kind === "email") return "email";
-  if (question.kind === "tel") return "tel";
-  if (question.id === "nombre") return "name";
-  return "off";
+function readOptin(): Record<string, string> {
+  try {
+    const raw = sessionStorage.getItem("lg_optin");
+    return raw ? (JSON.parse(raw) as Record<string, string>) : {};
+  } catch {
+    return {};
+  }
 }
 
 /** Retourne un message d'erreur en espagnol, ou null si la réponse est valide. */
@@ -195,25 +175,10 @@ function validate(question: Question, value: string): string | null {
   if (question.kind === "choice") {
     return trimmed ? null : "Elige una opción para continuar.";
   }
-
   if (!question.required) return null;
   if (!trimmed) return "Este campo es obligatorio.";
-
-  if (question.kind === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed)) {
-    return "Introduce un email válido.";
-  }
-
-  if (question.kind === "tel" && trimmed.replace(/\D/g, "").length < 8) {
-    return "Introduce un teléfono válido con prefijo.";
-  }
-
-  if (
-    question.kind === "longtext" &&
-    question.minLength &&
-    trimmed.length < question.minLength
-  ) {
+  if (question.minLength && trimmed.length < question.minLength) {
     return `Escribe al menos ${question.minLength} caracteres.`;
   }
-
   return null;
 }

@@ -1,18 +1,139 @@
 @import "tailwindcss";
 
-:root {
-  --background: #0a0a0b;
-  --foreground: #f5f5f5;
+/* Tokens repris du design Claude Design "Landing VSL Llamada". */
+@theme {
+  --color-brand: #2b4ff0;
+  --color-brand-dark: #1b3ad1;
+  --color-brand-tint: #e7ecff;
+  --color-brand-line: #c9d4ff;
+
+  --color-ink: #0b1533;
+  --color-muted: #5b6480;
+  --color-faint: #8a93ad;
+  --color-placeholder: #9ba3bc;
+
+  --color-line: #e6e9f2;
+  --color-surface: #f4f6fb;
+  --color-chip: #edeff5;
+
+  --color-danger: #e03b3b;
+  --color-danger-tint: #fdecec;
+  --color-star: #16a34a;
+
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--color-brand);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--color-ink);
+  text-decoration: underline;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-placeholder);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 160;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Élément révélé au scroll : masqué seulement si JS peut l'animer. */
+[data-fade]:not([data-seen]) {
+  opacity: 0;
+}
+[data-seen] {
+  animation: fadeUp 0.55s ease both;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-fade]:not([data-seen]) {
+    opacity: 1;
+  }
+  [data-seen] {
+    animation: none;
+  }
+}
+
+/*
+ * Grille du hero. Reprend le point de rupture 940px du design : en dessous,
+ * le formulaire passe entre le titre et les bénéfices pour rester au-dessus
+ * de la ligne de flottaison sur mobile.
+ */
+.hero-grid {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 1fr;
+  grid-template-areas: "t" "f" "b";
+  align-items: start;
+}
+.hero-t {
+  grid-area: t;
+}
+.hero-f {
+  grid-area: f;
+}
+.hero-b {
+  grid-area: b;
+}
+
+@media (min-width: 940px) {
+  .hero-grid {
+    gap: 48px 56px;
+    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-areas: "t f" "b f";
+  }
+}
+
+/* Colonne de réassurance de l'étape 3 : même seuil 940px que le design. */
+.wide-only {
+  display: none;
+}
+@media (min-width: 940px) {
+  .wide-only {
+    display: flex;
+  }
 }

@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Landing VSL — marché espagnol
 
-## Getting Started
+Funnel en 4 étapes, implémenté d'après la maquette Claude Design
+« Landing VSL Llamada » (sources dans [`design/`](design/)).
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+/            Captura     opt-in nom + email + téléphone
+/vsl         VSL         vidéo Vimeo + CTA (immédiat ou différé)
+/solicitud   Formulario  questionnaire de qualification
+/gracias     Gracias     confirmation, contact WhatsApp sous 24 h
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Le lead est enregistré **deux fois** : à l'opt-in puis à la candidature. Un
+prospect qui abandonne après la vidéo reste donc joignable.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Démarrer
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+## À remplir avant la mise en ligne
 
-To learn more about Next.js, take a look at the following resources:
+Tous les placeholders de la maquette sont regroupés dans
+[`src/config/site.ts`](src/config/site.ts) — aucun n'est codé en dur dans le JSX.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Champ | Placeholder actuel |
+| --- | --- |
+| `brand` | `[MARCA]` |
+| `domain` | `[DOMINIO]` |
+| `whatsappNumber` | `[NÚMERO]` |
+| `proof.reviewsCount` / `studentsCount` | `[X]` |
+| `proof.statFigure` / `statSource` | `[CIFRA]` / `[FUENTE]` |
+| `vsl.vimeoId` / `vsl.hash` | `null` (placeholder 16:9 affiché) |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Restent aussi à fournir, en tant qu'images : la capture de l'interface, la
+capture d'un message d'élève, les trois témoignages vidéo et la vidéo bonus.
+Chacune est signalée par un commentaire dans le composant concerné.
 
-## Deploy on Vercel
+## Réglages du funnel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **CTA de la VSL** — `vsl.ctaMode` : `"always"` (visible d'emblée) ou
+  `"delayed"` avec `vsl.ctaDelaySeconds`, pour n'ouvrir l'accès qu'après le pitch.
+- **Étape 3** — `application.mode` : `"internal"` pour le questionnaire React de
+  ce repo (branché sur `/api/lead`), ou `"typeform"` avec `application.typeformId`
+  pour l'embed prévu par la maquette.
+- **Split test du titre** — la maquette propose 4 variantes de H1. On la choisit
+  par `NEXT_PUBLIC_HERO_VARIANT=A|B|C|D`, sans redéployer de code.
+- **Questions** — [`src/config/questions.ts`](src/config/questions.ts) ; ajouter
+  ou retirer une question ne demande aucune modification du formulaire.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Où arrivent les leads
+
+`POST /api/lead` valide puis dispatche vers les destinations activées par
+variable d'environnement (voir [`.env.example`](.env.example)) :
+
+- `LEAD_WEBHOOK_URL` — webhook Make / Zapier / n8n
+- `RESEND_API_KEY` + `LEAD_NOTIFY_EMAIL` — notification email
+
+Tant qu'aucune n'est configurée, chaque lead est écrit dans les logs serveur :
+rien ne se perd. Une destination en panne n'empêche jamais le prospect
+d'avancer — les échecs sont loggés et l'API répond `200`.
+
+Pour brancher une nouvelle destination (CRM, Notion, WhatsApp), ajouter une
+entrée dans [`src/lib/destinations.ts`](src/lib/destinations.ts).
+
+Les paramètres UTM et le referrer sont capturés au premier chargement, conservés
+pendant la session et joints aux deux enregistrements.
+
+## Reste à faire
+
+- Pixels de conversion (Meta `Lead`, GA4 `generate_lead`) sur `/gracias` —
+  l'emplacement est marqué par un commentaire dans la page.
+- Pages légales : `/privacidad`, `/aviso-legal`, `/cookies` sont liées depuis le
+  footer et l'opt-in mais n'existent pas encore.

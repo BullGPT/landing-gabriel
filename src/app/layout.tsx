@@ -1,9 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { site } from "@/config/site";
+import { AttributionCapture } from "@/components/site/AttributionCapture";
+import { CookieBanner } from "@/components/site/CookieBanner";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -21,7 +35,6 @@ export const metadata: Metadata = {
     title: site.seo.title,
     description: site.seo.description,
   },
-  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -29,7 +42,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
-      <body className={`${inter.variable} antialiased`}>{children}</body>
+      <body className={`${jakarta.variable} ${plexMono.variable}`}>
+        <AttributionCapture />
+        {children}
+        <CookieBanner />
+      </body>
     </html>
   );
 }

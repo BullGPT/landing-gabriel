@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { deliver } from "@/lib/destinations";
-import type { Lead } from "@/lib/lead";
+import type { Lead, LeadStage } from "@/lib/lead";
 import { questions } from "@/config/questions";
 
 export const runtime = "nodejs";
 
 const MAX_FIELD_LENGTH = 2000;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -22,8 +23,8 @@ export async function POST(request: Request) {
 
   const { failed } = await deliver(parsed.lead);
 
-  // On répond 200 même en cas d'échec d'une intégration : le lead est loggé
-  // côté serveur et le prospect ne doit jamais voir une erreur à cette étape.
+  // On répond 200 même si une intégration échoue : le lead est loggé côté
+  // serveur et le prospect ne doit jamais être bloqué par un outil tiers.
   return NextResponse.json({ ok: true, warnings: failed });
 }
 
@@ -35,25 +36,41 @@ function parseLead(
   }
 
   const raw = body as Record<string, unknown>;
+  const stage = raw.stage;
+  if (stage !== "optin" && stage !== "solicitud") {
+    return { ok: false, error: "invalid_stage" };
+  }
+
   const answers = sanitizeRecord(raw.answers);
   const attribution = sanitizeRecord(raw.attribution);
 
-  for (const question of questions) {
-    const isRequired = question.kind === "choice" || question.required;
-    if (isRequired && !answers[question.id]) {
-      return { ok: false, error: `missing_field:${question.id}` };
-    }
+  const missing = requiredFields(stage).find((field) => !answers[field]);
+  if (missing) {
+    return { ok: false, error: `missing_field:${missing}` };
   }
 
-  const email = answers.email ?? "";
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+  if (stage === "optin" && !EMAIL_RE.test(answers.email)) {
     return { ok: false, error: "invalid_email" };
   }
 
   return {
     ok: true,
-    lead: { answers, attribution, submittedAt: new Date().toISOString() },
+    lead: {
+      stage: stage as LeadStage,
+      answers,
+      attribution,
+      submittedAt: new Date().toISOString(),
+    },
   };
+}
+
+function requiredFields(stage: LeadStage): string[] {
+  if (stage === "optin") {
+    return ["nombre", "email", "telefono", "consentimiento"];
+  }
+  return questions
+    .filter((q) => q.kind === "choice" || q.required)
+    .map((q) => q.id);
 }
 
 function sanitizeRecord(value: unknown): Record<string, string> {
