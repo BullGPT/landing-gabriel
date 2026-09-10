@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 const CARD = "rounded-2xl border border-line bg-white p-6";
@@ -42,69 +43,19 @@ export function NotYourFault() {
   );
 }
 
-const MONO = "IBM Plex Mono, monospace";
-const ART = {
-  width: 180,
-  height: 96,
-  viewBox: "0 0 180 96",
-  fill: "none",
-  stroke: "#101A3D",
-  strokeWidth: 1.4,
-} as const;
-
-const methodCards: { art: ReactNode; title: string; body: string }[] = [
+const methodCards: { image: string; title: string; body: string }[] = [
   {
-    art: (
-      <svg {...ART} aria-hidden>
-        <path d="M12 84h156" />
-        <path d="M34 32v40" />
-        <rect x="28" y="40" width="12" height="26" fill="#EDF1FF" />
-        <path d="M62 24v52" />
-        <rect x="56" y="34" width="12" height="34" fill="#2B4BF2" stroke="none" />
-        <path d="M90 42v34" />
-        <rect x="84" y="50" width="12" height="20" fill="#EDF1FF" />
-        <rect x="48" y="18" width="30" height="60" stroke="#2B4BF2" strokeDasharray="4 4" />
-        <rect x="112" y="20" width="58" height="24" rx="6" fill="#FFFFFF" />
-        <path d="M120 44l-6 10 12-4" fill="#FFFFFF" />
-        <text x="120" y="36" fontFamily={MONO} fontSize="10" fill="#2B4BF2" stroke="none">
-          el mapa
-        </text>
-      </svg>
-    ),
+    image: "/cards/ia-analiza.png",
     title: "La IA analiza, tú decides",
     body: "Estructura, niveles y contexto en segundos. No le pides que te diga qué hacer, eso sería volver a las señales con otra cara. Le pides el mapa, y decides tú con tus reglas.",
   },
   {
-    art: (
-      <svg {...ART} aria-hidden>
-        <circle cx="54" cy="40" r="12" fill="#EDF1FF" />
-        <circle cx="90" cy="34" r="12" fill="#EDF1FF" />
-        <circle cx="126" cy="44" r="12" fill="#2B4BF2" stroke="none" />
-        <path d="M40 76c4-12 14-18 28-18M76 76c4-14 16-20 28-20" />
-        <path d="M66 40h12M102 38l12 4" stroke="#C9D4FF" />
-      </svg>
-    ),
+    image: "/cards/entorno-corrige.png",
     title: "Un entorno que te corrige",
     body: "Operar solo es lo que más cuentas revienta. En grupo alguien ve el error que llevas repitiendo tres semanas, y te lo dice antes de que te cueste dinero.",
   },
   {
-    art: (
-      <svg {...ART} aria-hidden>
-        <rect x="20" y="20" width="60" height="56" rx="8" fill="#FFFFFF" />
-        <rect x="32" y="34" width="36" height="28" fill="#2B4BF2" stroke="none" />
-        <rect
-          x="100"
-          y="20"
-          width="60"
-          height="56"
-          rx="8"
-          fill="#F5F7FB"
-          stroke="#C9D4FF"
-          strokeDasharray="4 4"
-        />
-        <path d="M112 34h36M112 46h24M112 58h30" stroke="#C9D4FF" />
-      </svg>
-    ),
+    image: "/cards/un-solo-activo.png",
     title: "Un solo activo, un solo horario",
     body: "La rentabilidad sale de la repetición. Cien operaciones en el mismo mercado te enseñan más que saltar entre veinte.",
   },
@@ -127,8 +78,16 @@ export function MethodCards() {
         <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
           {methodCards.map((card) => (
             <div key={card.title} className={CARD}>
-              <div className="flex h-30 items-center justify-center rounded-xl bg-surface">
-                {card.art}
+              {/* Fond sombre : les illustrations sont sur fond noir, elles
+                  occupent toute la vignette plutôt que d'y flotter. */}
+              <div className="relative h-30 overflow-hidden rounded-xl bg-ink">
+                <Image
+                  src={card.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 900px) 320px, 100vw"
+                  className="object-cover"
+                />
               </div>
               <h3 className="mb-2 mt-4.5 text-[19px] font-bold tracking-[-0.01em]">
                 {card.title}
