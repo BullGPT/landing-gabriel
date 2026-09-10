@@ -1,14 +1,16 @@
+import Image from "next/image";
 import { site } from "@/config/site";
 
-/** Logo + nom de marque, repris à l'identique du design. */
+/** Logo de la marque. Le PNG est détouré, il tient sur n'importe quel fond. */
 export function BrandMark() {
   return (
-    <span className="flex items-center gap-2.5 text-[18px] font-bold tracking-[-0.02em] text-ink">
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
-        <rect width="22" height="22" rx="6" fill="#2B4BF2" />
-        <path d="M6 15l3.5-4 2.5 2.5L16 7" stroke="#FFFFFF" strokeWidth="1.8" />
-      </svg>
-      {site.brand}
-    </span>
+    <Image
+      src="/logo-rumbo.png"
+      alt={site.brand}
+      width={70}
+      height={28}
+      priority
+      className="h-7 w-auto"
+    />
   );
 }

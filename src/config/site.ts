@@ -1,16 +1,16 @@
 /**
  * Point de configuration unique de la landing.
- * Les valeurs entre crochets ([MARCA]...) sont les placeholders laissés tels
- * quels dans la maquette : ils doivent être remplis avant la mise en ligne.
+ * Les valeurs restées entre crochets sont les placeholders de la maquette :
+ * elles doivent être remplies avant la mise en ligne.
  */
 
 export const site = {
-  brand: "[MARCA]",
+  brand: "Rumbo",
   locale: "es-ES",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
 
   seo: {
-    title: "Vive del trading con inteligencia artificial | [MARCA]",
+    title: "Vive del trading con inteligencia artificial | Rumbo",
     description:
       "El método completo que usan los traders americanos para operar con criterio propio, una hora al día. Vídeo de 24 minutos, acceso inmediato.",
     ogImage: "/og.jpg",
