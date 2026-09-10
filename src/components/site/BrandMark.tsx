@@ -7,10 +7,10 @@ export function BrandMark() {
     <Image
       src="/logo-rumbo.png"
       alt={site.brand}
-      width={70}
-      height={28}
+      width={110}
+      height={44}
       priority
-      className="h-7 w-auto"
+      className="h-11 w-auto"
     />
   );
 }
