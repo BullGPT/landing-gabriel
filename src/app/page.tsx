@@ -35,12 +35,9 @@ export default function LandingPage() {
             <br />
             <span className="text-brand">una hora al día.</span>
           </h1>
-          <p className="mx-auto mt-4.5 max-w-[60ch] text-[16.5px] text-muted text-pretty">
-            Dentro del vídeo está el método Rumbo al completo: el sistema que usan
-            los traders americanos para operar con criterio propio, sin años
-            estudiando análisis técnico, sin copiar las señales de nadie y sin
-            pasar el día delante de una pantalla. Dura 24 minutos. Ponlo con
-            sonido y míralo entero.
+          <p className="mx-auto mt-4.5 max-w-[54ch] text-[16.5px] text-muted text-pretty">
+            El método Rumbo al completo, sin años de análisis técnico ni señales
+            de nadie. Dura 24 minutos: ponlo con sonido y míralo entero.
           </p>
         </section>
 
