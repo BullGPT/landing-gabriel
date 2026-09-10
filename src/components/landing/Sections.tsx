@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { site } from "@/config/site";
 
 const CARD = "rounded-2xl border border-line bg-white p-6";
 const H2 =
@@ -176,6 +177,56 @@ export function SocialProofSlots() {
               La frase más fuerte, en tarjeta azul.
             </span>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const founders = [
+  {
+    photo: "/fundadores/gabriel.jpg",
+    name: "Gabriel",
+    role: "Trader con IA",
+    body: "Opera los mercados con inteligencia artificial y gestiona más de 200.000 € de capital financiado.",
+  },
+  {
+    photo: "/fundadores/lucas.jpg",
+    name: "Lucas",
+    role: "Fundador de BullGPT",
+    body: "Creador de BullGPT, la IA número 1 para operar en los mercados.",
+  },
+];
+
+export function Founders() {
+  return (
+    <section className="px-5 pt-[clamp(44px,7vw,80px)]">
+      <div className="mx-auto max-w-[820px]">
+        <h2 className={H2}>
+          Quién está detrás
+          <br />
+          <span className="text-brand">de {site.brand}.</span>
+        </h2>
+
+        <div className="mt-7 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
+          {founders.map((person) => (
+            <div key={person.name} className={`${CARD} text-center`}>
+              <Image
+                src={person.photo}
+                alt={person.name}
+                width={112}
+                height={112}
+                className="mx-auto h-28 w-28 rounded-full object-cover"
+              />
+              <h3 className="mt-4 text-[19px] font-bold tracking-[-0.01em]">
+                {person.name}
+              </h3>
+              <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-brand">
+                {person.role}
+              </div>
+              <p className="m-0 mt-3 text-[15.5px] text-muted">{person.body}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

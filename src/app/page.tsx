@@ -7,6 +7,7 @@ import { StickyBar } from "@/components/vsl/StickyBar";
 import { FinalCta } from "@/components/vsl/FinalCta";
 import {
   CallExplainer,
+  Founders,
   MethodCards,
   NotYourFault,
   Qualification,
@@ -49,6 +50,7 @@ export default function LandingPage() {
         <MethodCards />
         <UsaGap />
         <SocialProofSlots />
+        <Founders />
         <CallExplainer />
         <Qualification />
 
