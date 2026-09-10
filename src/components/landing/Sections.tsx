@@ -146,6 +146,38 @@ export function UsaGap() {
  * Emplacements de preuve sociale, laissés vides à dessein dans la maquette :
  * il n'y a pas de faux témoignage, chaque carte indique ce qu'il faut fournir.
  */
+/**
+ * Témoignage vidéo, tourné au format vertical (9:16).
+ * `loading="lazy"` compte ici : l'iframe est loin sous la ligne de flottaison,
+ * et un lecteur Vimeo pèse lourd. Il ne se charge qu'à l'approche.
+ */
+function VideoTestimonial() {
+  const params = new URLSearchParams({
+    badge: "0",
+    autopause: "0",
+    player_id: "0",
+    app_id: "58479",
+    // Coupe le pistage Vimeo : la page cible l'Espagne et affiche un bandeau cookies.
+    dnt: "1",
+  });
+
+  return (
+    <div className="mx-auto mt-7 w-full max-w-[320px] border border-line bg-white p-2.5">
+      <div className="relative aspect-[9/16] w-full overflow-hidden bg-ink">
+        <iframe
+          src={`https://player.vimeo.com/video/1225758409?${params.toString()}`}
+          title="Testimonio de un alumno"
+          loading="lazy"
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      </div>
+    </div>
+  );
+}
+
 export function SocialProofSlots() {
   const slots = [
     {
@@ -166,6 +198,8 @@ export function SocialProofSlots() {
           <br />
           <span className="text-brand">que tú.</span>
         </h2>
+
+        <VideoTestimonial />
 
         <div className="mt-7 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
           {slots.map((slot) => (
