@@ -1,96 +1,42 @@
 /**
  * Point de configuration unique de la landing.
- * Les valeurs entre crochets ([MARCA], [CIFRA]...) sont les placeholders
- * laissés tels quels dans la maquette : ils doivent être remplis avant la mise
- * en ligne. Ils sont regroupés ici pour qu'aucun ne soit oublié dans le JSX.
+ * Les valeurs entre crochets ([MARCA]...) sont les placeholders laissés tels
+ * quels dans la maquette : ils doivent être remplis avant la mise en ligne.
  */
 
 export const site = {
   brand: "[MARCA]",
-  domain: "[DOMINIO]",
-  /** Numéro WhatsApp affiché sur la page de remerciement. */
-  whatsappNumber: "[NÚMERO]",
   locale: "es-ES",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
 
   seo: {
-    title:
-      "El método de análisis con IA que usan los traders americanos | [MARCA]",
+    title: "Vive del trading con inteligencia artificial | [MARCA]",
     description:
-      "Descubre cómo analizar cualquier gráfico en menos de 30 segundos con inteligencia artificial, el sistema que usan miles de traders en Estados Unidos.",
+      "El método completo que usan los traders americanos para operar con criterio propio, una hora al día. Vídeo de 24 minutos, acceso inmediato.",
     ogImage: "/og.jpg",
   },
 
-  /** Preuve sociale affichée dans le hero et sur la page VSL. */
-  proof: {
-    rating: "4,7",
-    reviewsCount: "[X]",
-    studentsCount: "[X]",
-    /** Bloc statistique de la landing. */
-    statFigure: "[CIFRA]",
-    statSource: "[FUENTE]",
-  },
-
   vsl: {
-    /** Durée annoncée dans les titres et le compteur. */
-    durationLabel: "17 minutos",
-    /** ID numérique Vimeo. Tant qu'il est null, le placeholder est affiché. */
+    /** ID numérique Vimeo. Tant qu'il est null, le lecteur tourne en simulation. */
     vimeoId: null as string | null,
     /** Token des vidéos non répertoriées (vimeo.com/ID/HASH). */
     hash: null as string | null,
+    /** Durée réelle de la vidéo, en secondes (24:00). */
+    durationSeconds: 1440,
+    /** Seuil de déverrouillage du formulaire, en secondes (22:30). */
+    unlockAtSeconds: 1350,
     /**
-     * "always" : le CTA est visible dès l'arrivée.
-     * "delayed" : il apparaît après `ctaDelaySeconds` (gate classique de VSL).
-     * Reprend la prop `vslCta` du design.
+     * Accélère l'horloge UNIQUEMENT pour tester la page sans attendre 22 min.
+     * Doit valoir 1 en production. Pilotable par NEXT_PUBLIC_PREVIEW_SPEED.
      */
-    ctaMode: "always" as "always" | "delayed",
-    ctaDelaySeconds: 8,
+    previewSpeed: Number(process.env.NEXT_PUBLIC_PREVIEW_SPEED ?? 1),
   },
 
-  /**
-   * Étape 3 du funnel.
-   * "internal" : le questionnaire React de ce repo, branché sur /api/lead.
-   * "typeform" : l'embed Typeform prévu par la maquette (renseigner typeformId).
-   */
-  application: {
-    mode: "internal" as "internal" | "typeform",
-    typeformId: "",
-  },
+  /** Offre proposée aux prospects non qualifiés, sur la page de refus. */
+  midTicketName: "[NOMBRE DEL MID TICKET]",
 
   legal: {
     riskWarning:
-      "Aviso de riesgo: operar en los mercados financieros conlleva riesgo de pérdida. Los resultados pasados no garantizan resultados futuros. Este contenido es formativo y no constituye asesoramiento financiero.",
-    metaDisclaimer:
-      "Este sitio no está afiliado a Meta Platforms, Inc. ni respaldado por ella.",
+      "El trading conlleva riesgo de pérdida. Esta formación no constituye asesoramiento financiero ni recomendación de inversión. Los resultados dependen de cada persona y no están garantizados.",
   },
 } as const;
-
-/**
- * Variante de titre du hero (split test A/B/C/D repris du design).
- * Se pilote par variable d'environnement pour tester sans redéployer le code.
- */
-export const heroVariants = {
-  A: {
-    lead: "El método que los traders americanos usan",
-    accent: "para ser rentables con la inteligencia artificial",
-  },
-  B: {
-    lead: "Analiza cualquier gráfico en 30 segundos",
-    accent: "con el sistema de IA que llegó de Estados Unidos",
-  },
-  C: {
-    lead: "Miles de traders en EE.UU. ya operan con IA.",
-    accent: "En España casi nadie lo aplica todavía",
-  },
-  D: {
-    lead: "Deja de operar a ciegas:",
-    accent: "el método de análisis con IA que usan los traders americanos",
-  },
-} as const;
-
-export type HeroVariantKey = keyof typeof heroVariants;
-
-export function activeHeroVariant() {
-  const key = (process.env.NEXT_PUBLIC_HERO_VARIANT ?? "A") as HeroVariantKey;
-  return heroVariants[key] ?? heroVariants.A;
-}

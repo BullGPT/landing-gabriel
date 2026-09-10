@@ -1,90 +1,106 @@
 /**
- * Questionnaire de l'étape 3 (« Último paso antes de tu sesión »).
- * Les coordonnées (nom, email, téléphone) sont déjà collectées à l'opt-in de
- * l'étape 1 : on ne les redemande pas ici.
- * L'ordre du tableau = l'ordre des étapes.
+ * Questionnaire de réservation, repris tel quel de la maquette.
+ * L'ordre du tableau = l'ordre des étapes sur mobile ; sur grand écran toutes
+ * les questions sont affichées d'un coup.
  */
 
-export type Question =
-  | {
-      id: string;
-      kind: "choice";
-      label: string;
-      help?: string;
-      options: { value: string; label: string; disqualifying?: boolean }[];
-    }
-  | {
-      id: string;
-      kind: "longtext";
-      label: string;
-      help?: string;
-      placeholder?: string;
-      required?: boolean;
-      minLength?: number;
-    };
+export type Question = {
+  id: string;
+  label: string;
+  help?: string;
+  /** Choix multiple : plusieurs réponses possibles. */
+  multi?: boolean;
+  options?: string[];
+  /** Réponse libre. */
+  text?: boolean;
+  /** Bloc de coordonnées (nom, WhatsApp, consentement). */
+  contact?: boolean;
+};
 
 export const questions: Question[] = [
   {
-    id: "experiencia",
-    kind: "choice",
+    id: "q1",
     label: "¿Cuánto tiempo llevas operando?",
     options: [
-      { value: "nunca", label: "Todavía no he operado nunca" },
-      { value: "menos-6m", label: "Menos de 6 meses" },
-      { value: "6m-2a", label: "Entre 6 meses y 2 años" },
-      { value: "mas-2a", label: "Más de 2 años" },
+      "Nunca he operado",
+      "Menos de 6 meses",
+      "Entre 6 meses y 2 años",
+      "Más de 2 años",
     ],
   },
   {
-    id: "situacion",
-    kind: "choice",
-    label: "¿Qué describe mejor tu situación hoy?",
+    id: "q2",
+    label: "¿Cómo describirías tus resultados hasta ahora?",
     options: [
-      { value: "empezando", label: "Estoy empezando, aún no tengo método" },
-      { value: "irregular", label: "Tengo resultados, pero son irregulares" },
-      { value: "rentable", label: "Soy rentable y quiero escalar" },
+      "En pérdidas",
+      "Más o menos en cero",
+      "Gano algunos meses y pierdo otros",
+      "Rentable de forma constante",
     ],
   },
   {
-    id: "tiempo",
-    kind: "choice",
-    label: "¿Cuánto tiempo puedes dedicar al análisis cada día?",
-    help: "El método requiere entre 30 y 45 minutos diarios.",
+    id: "q3",
+    label: "¿Qué has probado ya?",
+    help: "Puedes elegir varias.",
+    multi: true,
     options: [
-      { value: "menos-30", label: "Menos de 30 minutos", disqualifying: true },
-      { value: "30-45", label: "Entre 30 y 45 minutos" },
-      { value: "mas-45", label: "Más de 45 minutos" },
+      "Grupos de señales",
+      "Formaciones online",
+      "Prop firms",
+      "Aprender por mi cuenta",
+      "Nada todavía",
     ],
   },
   {
-    id: "inversion",
-    kind: "choice",
+    id: "q4",
+    label: "¿Con qué capital cuentas hoy para operar?",
+    help: "Dinero que puedes permitirte arriesgar, no tus ahorros totales.",
+    options: [
+      "Menos de 500 €",
+      "Entre 500 € y 2.000 €",
+      "Entre 2.000 € y 5.000 €",
+      "Más de 5.000 €",
+    ],
+  },
+  {
+    id: "q5",
+    label: "¿Cuánto tiempo puedes dedicarle al día?",
+    options: [
+      "Menos de 30 minutos",
+      "Entre 30 minutos y 1 hora",
+      "Más de 1 hora",
+    ],
+  },
+  {
+    id: "q6",
     label:
-      "La formación requiere una inversión. ¿Estás en disposición de invertir si encaja contigo?",
+      "Si en la llamada vemos que esto encaja contigo, ¿estarías en disposición de invertir en tu formación?",
     options: [
-      { value: "si", label: "Sí, si veo que encaja" },
-      { value: "quizas", label: "Depende de la cantidad" },
-      { value: "no", label: "No, ahora mismo no", disqualifying: true },
+      "Sí, si me convence",
+      "Sí, pero necesitaría pago fraccionado",
+      "No en este momento",
     ],
   },
   {
-    id: "objetivo",
-    kind: "longtext",
-    label: "¿Qué quieres conseguir en los próximos 6 meses?",
-    placeholder: "Cuéntanos brevemente tu objetivo y qué te está frenando.",
-    required: true,
-    minLength: 20,
+    id: "q7",
+    label: "¿Qué cambiaría en tu vida si el trading empezara a funcionarte?",
+    text: true,
   },
+  { id: "contact", label: "Tus datos de contacto", contact: true },
 ];
 
-/** Préfixes téléphoniques proposés à l'opt-in, repris du design. */
+/**
+ * Réponse qui disqualifie : le prospect part vers la page de refus plutôt que
+ * vers la confirmation de rendez-vous.
+ */
+export const DISQUALIFYING = { questionId: "q6", answer: "No en este momento" };
+
+/** Préfixes téléphoniques proposés, repris du design. */
 export const phonePrefixes = [
   { value: "+34", label: "🇪🇸 +34" },
   { value: "+52", label: "🇲🇽 +52" },
   { value: "+54", label: "🇦🇷 +54" },
-  { value: "+56", label: "🇨🇱 +56" },
   { value: "+57", label: "🇨🇴 +57" },
+  { value: "+56", label: "🇨🇱 +56" },
   { value: "+1", label: "🇺🇸 +1" },
-  { value: "+351", label: "🇵🇹 +351" },
-  { value: "+33", label: "🇫🇷 +33" },
 ] as const;

@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import { deliver } from "@/lib/destinations";
-import type { Lead, LeadStage } from "@/lib/lead";
-import { questions } from "@/config/questions";
+import type { Lead } from "@/lib/lead";
+import { DISQUALIFYING, questions } from "@/config/questions";
 
 export const runtime = "nodejs";
 
 const MAX_FIELD_LENGTH = 2000;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -25,7 +24,11 @@ export async function POST(request: Request) {
 
   // On répond 200 même si une intégration échoue : le lead est loggé côté
   // serveur et le prospect ne doit jamais être bloqué par un outil tiers.
-  return NextResponse.json({ ok: true, warnings: failed });
+  return NextResponse.json({
+    ok: true,
+    outcome: parsed.lead.outcome,
+    warnings: failed,
+  });
 }
 
 function parseLead(
@@ -36,41 +39,34 @@ function parseLead(
   }
 
   const raw = body as Record<string, unknown>;
-  const stage = raw.stage;
-  if (stage !== "optin" && stage !== "solicitud") {
-    return { ok: false, error: "invalid_stage" };
-  }
-
   const answers = sanitizeRecord(raw.answers);
   const attribution = sanitizeRecord(raw.attribution);
 
-  const missing = requiredFields(stage).find((field) => !answers[field]);
+  const missing = requiredFields().find((field) => !answers[field]);
   if (missing) {
     return { ok: false, error: `missing_field:${missing}` };
-  }
-
-  if (stage === "optin" && !EMAIL_RE.test(answers.email)) {
-    return { ok: false, error: "invalid_email" };
   }
 
   return {
     ok: true,
     lead: {
-      stage: stage as LeadStage,
       answers,
       attribution,
+      outcome:
+        answers[DISQUALIFYING.questionId] === DISQUALIFYING.answer
+          ? "no-match"
+          : "llamada",
       submittedAt: new Date().toISOString(),
     },
   };
 }
 
-function requiredFields(stage: LeadStage): string[] {
-  if (stage === "optin") {
-    return ["nombre", "email", "telefono", "consentimiento"];
-  }
-  return questions
-    .filter((q) => q.kind === "choice" || q.required)
+/** Les questions à choix sont obligatoires ; la réponse libre ne l'est pas. */
+function requiredFields(): string[] {
+  const fromQuestions = questions
+    .filter((q) => Boolean(q.options))
     .map((q) => q.id);
+  return [...fromQuestions, "nombre", "telefono", "consentimiento"];
 }
 
 function sanitizeRecord(value: unknown): Record<string, string> {

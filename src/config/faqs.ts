@@ -1,27 +1,32 @@
-/** FAQ reprise telle quelle du design (identique sur la landing et la page VSL). */
+/** FAQ reprise telle quelle du design. */
 export const faqs = [
   {
+    q: "¿En cuánto tiempo puedo ser rentable?",
+    a: "Te lo decimos claro: nadie vive del trading en dos semanas, y nadie lo hace con una cuenta de 200 euros. Lo que sí es realista en 60 días es tener un proceso que funcione, unas reglas claras y una rutina que puedas sostener. A partir de ahí, lo que crezca la cuenta depende de tu capital, tu disciplina y el tiempo que le dediques. Eso ya no lo decide el método.",
+  },
+  {
+    q: "¿Cuánto cuesta el programa?",
+    a: "Te lo decimos en la llamada, con total transparencia. No tiene sentido darte un precio antes de saber si el sistema encaja contigo. Lo que sí te podemos decir ahora: es una formación con acompañamiento, no una suscripción de señales, y hay pago fraccionado disponible.",
+  },
+  {
+    q: "¿Me vais a vender por teléfono?",
+    a: "Te vamos a decir si encajas. Si encajas, te explicamos el programa y decides tú. Si no encajas, te lo decimos y colgamos. No insistimos y no volvemos a llamar.",
+  },
+  {
+    q: "¿Cuánto capital necesito?",
+    a: "Hay un mínimo por debajo del cual esto no tiene sentido, y te lo decimos en la llamada. Es bastante menos de lo que la gente imagina, pero no es cero. Si estás muy por debajo, te lo diremos: es mejor esperar dos meses que empezar mal.",
+  },
+  {
     q: "¿Necesito experiencia previa?",
-    a: "No hace falta ser experto, pero sí es útil haber operado alguna vez o entender lo básico de un gráfico. El método se explica desde cero y se aplica paso a paso.",
+    a: "No hace falta ser experto. Ayuda haber operado alguna vez, aunque haya salido mal. Quien viene sin malos hábitos suele avanzar más rápido.",
   },
   {
-    q: "¿Cuánto capital necesito para empezar?",
-    a: "Puedes practicar el análisis sin arriesgar capital hasta que el proceso te resulte natural. Cuando decidas operar, la cantidad es una decisión tuya y debe ser dinero que puedas permitirte perder.",
+    q: "¿Es una sala de señales?",
+    a: "No. Si mañana desaparecemos, tú sigues sabiendo operar. Ese es literalmente el criterio para distinguir una formación de una suscripción a la dependencia.",
   },
+  { q: "¿Cuánto dura la llamada?", a: "Treinta minutos." },
   {
-    q: "¿Esto funciona en España?",
-    a: "Sí. El método es de análisis, no depende del país. Las herramientas de IA que se utilizan están disponibles desde España y la formación está en español.",
-  },
-  {
-    q: "¿Cuánto tiempo al día requiere?",
-    a: "Entre 30 y 45 minutos para analizar con criterio. La idea es reducir el tiempo delante del gráfico, no aumentarlo.",
-  },
-  {
-    q: "¿Es una señal de trading o una formación?",
-    a: "Es una formación. No enviamos señales para copiar: aprendes un proceso de análisis que puedes ejecutar tú mismo.",
-  },
-  {
-    q: "¿Qué pasa después de rellenar el formulario?",
-    a: "Lo revisamos a mano. Si vemos encaje, te escribimos por WhatsApp en menos de 24 horas para agendar una sesión sin compromiso.",
+    q: "¿Y si al final no puedo asistir?",
+    a: "Avísanos y la movemos. Si no avisas, la plaza pasa a la siguiente persona.",
   },
 ] as const;

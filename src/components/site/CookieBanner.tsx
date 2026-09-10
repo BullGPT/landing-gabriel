@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
+import { useMediaQuery } from "@/components/vsl/useMediaQuery";
 
 const STORAGE_KEY = "lg_cookies";
 
@@ -11,7 +12,6 @@ function readChoice(): string | null {
   try {
     return localStorage.getItem(STORAGE_KEY);
   } catch {
-    // Navigation privée : on considère qu'aucun choix n'a été fait.
     return null;
   }
 }
@@ -19,13 +19,10 @@ function readChoice(): string | null {
 /** Côté serveur on ne sait rien : on ne rend pas le bandeau avant l'hydratation. */
 const serverChoice = () => "pending";
 
-/**
- * Bandeau cookies du design. Le choix est mémorisé pour ne pas réapparaître
- * à chaque étape du funnel.
- */
 export function CookieBanner() {
   const stored = useSyncExternalStore(subscribe, readChoice, serverChoice);
   const [dismissed, setDismissed] = useState(false);
+  const wide = useMediaQuery("(min-width: 900px)");
 
   function decide(choice: "accepted" | "rejected") {
     try {
@@ -39,29 +36,30 @@ export function CookieBanner() {
   if (dismissed || stored !== null) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-70 border-t border-line bg-white px-4 py-3.5 shadow-[0_-4px_24px_rgba(11,21,51,.06)]">
-      <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-3.5">
-        <p className="m-0 max-w-[62ch] text-[13.5px] text-muted">
-          Usamos cookies propias y de terceros para medir el rendimiento de
-          nuestras campañas. Puedes aceptarlas o rechazarlas.
-        </p>
-        <span className="flex flex-1 justify-end gap-2.5 sm:flex-none">
-          <button
-            type="button"
-            onClick={() => decide("rejected")}
-            className="max-w-[150px] flex-1 cursor-pointer rounded-[10px] border border-line bg-transparent px-4 py-3 text-[13.5px] font-medium text-muted"
-          >
-            Rechazar
-          </button>
-          <button
-            type="button"
-            onClick={() => decide("accepted")}
-            className="max-w-[150px] flex-1 cursor-pointer rounded-[10px] border-none bg-brand px-4 py-3 text-[13.5px] font-semibold text-white"
-          >
-            Aceptar
-          </button>
-        </span>
-      </div>
+    <div
+      className={`fixed z-50 flex flex-wrap items-center gap-2.5 rounded-xl border border-line bg-white px-3.5 py-3 shadow-[0_8px_28px_rgba(16,26,61,.1)] ${
+        wide ? "bottom-5 left-5 max-w-[420px]" : "inset-x-3 bottom-36"
+      }`}
+    >
+      <p className="m-0 flex-[1_1_240px] text-[12.5px] text-muted">
+        Usamos cookies para medir el rendimiento de nuestras campañas.
+      </p>
+      <span className="flex flex-none gap-2">
+        <button
+          type="button"
+          onClick={() => decide("rejected")}
+          className="cursor-pointer rounded-lg border border-line bg-transparent px-3.5 py-2.5 text-[12.5px] text-muted"
+        >
+          Rechazar
+        </button>
+        <button
+          type="button"
+          onClick={() => decide("accepted")}
+          className="cursor-pointer rounded-lg border-none bg-brand px-3.5 py-2.5 text-[12.5px] font-semibold text-white"
+        >
+          Aceptar
+        </button>
+      </span>
     </div>
   );
 }
