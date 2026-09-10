@@ -77,19 +77,15 @@ const methodCards: { art: ReactNode; title: string; body: string }[] = [
   {
     art: (
       <svg {...ART} aria-hidden>
-        <circle cx="48" cy="52" r="28" fill="#FFFFFF" />
-        <path d="M48 24v-6M38 18h20M48 52l14-11" />
-        <circle cx="48" cy="52" r="3" fill="#2B4BF2" stroke="none" />
-        <rect x="96" y="46" width="72" height="12" rx="6" fill="#FFFFFF" />
-        <rect x="96" y="46" width="44" height="12" rx="6" fill="#2B4BF2" stroke="none" />
-        <text x="96" y="32" fontFamily={MONO} fontSize="13" fill="#2B4BF2" stroke="none">
-          40s
-        </text>
-        <path d="M96 72h44" stroke="#C9D4FF" />
+        <circle cx="54" cy="40" r="12" fill="#EDF1FF" />
+        <circle cx="90" cy="34" r="12" fill="#EDF1FF" />
+        <circle cx="126" cy="44" r="12" fill="#2B4BF2" stroke="none" />
+        <path d="M40 76c4-12 14-18 28-18M76 76c4-14 16-20 28-20" />
+        <path d="M66 40h12M102 38l12 4" stroke="#C9D4FF" />
       </svg>
     ),
-    title: "Un análisis completo en 40 segundos",
-    body: "No es el objetivo, es lo que hace posible el objetivo: operar una hora al día en lugar de cinco, y seguir llegando a tiempo a las entradas.",
+    title: "Un entorno que te corrige",
+    body: "Operar solo es lo que más cuentas revienta. En grupo alguien ve el error que llevas repitiendo tres semanas, y te lo dice antes de que te cueste dinero.",
   },
   {
     art: (
@@ -111,19 +107,6 @@ const methodCards: { art: ReactNode; title: string; body: string }[] = [
     ),
     title: "Un solo activo, un solo horario",
     body: "La rentabilidad sale de la repetición. Cien operaciones en el mismo mercado te enseñan más que saltar entre veinte.",
-  },
-  {
-    art: (
-      <svg {...ART} aria-hidden>
-        <circle cx="54" cy="40" r="12" fill="#EDF1FF" />
-        <circle cx="90" cy="34" r="12" fill="#EDF1FF" />
-        <circle cx="126" cy="44" r="12" fill="#2B4BF2" stroke="none" />
-        <path d="M40 76c4-12 14-18 28-18M76 76c4-14 16-20 28-20" />
-        <path d="M66 40h12M102 38l12 4" stroke="#C9D4FF" />
-      </svg>
-    ),
-    title: "Un entorno que te corrige",
-    body: "Operar solo es lo que más cuentas revienta. En grupo alguien ve el error que llevas repitiendo tres semanas, y te lo dice antes de que te cueste dinero.",
   },
 ];
 
