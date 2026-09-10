@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { site } from "@/config/site";
+import { IconSignal, IconSitemap, IconTeam } from "./CardIcons";
 
 const CARD = "border border-line bg-white p-6";
 const H2 =
@@ -44,19 +45,27 @@ export function NotYourFault() {
   );
 }
 
-const methodCards: { image: string; title: string; body: string }[] = [
+const methodCards: {
+  image: string;
+  icon: ReactNode;
+  title: string;
+  body: string;
+}[] = [
   {
     image: "/cards/ia-analiza.png",
+    icon: <IconSignal />,
     title: "La IA analiza, tú decides",
     body: "Estructura, niveles y contexto en segundos. No le pides que te diga qué hacer, eso sería volver a las señales con otra cara. Le pides el mapa, y decides tú con tus reglas.",
   },
   {
     image: "/cards/entorno-corrige.png",
+    icon: <IconTeam />,
     title: "Un entorno que te corrige",
     body: "Operar solo es lo que más cuentas revienta. En grupo alguien ve el error que llevas repitiendo tres semanas, y te lo dice antes de que te cueste dinero.",
   },
   {
     image: "/cards/un-solo-activo.png",
+    icon: <IconSitemap />,
     title: "Un solo activo, un solo horario",
     body: "La rentabilidad sale de la repetición. Cien operaciones en el mismo mercado te enseñan más que saltar entre veinte.",
   },
@@ -94,8 +103,9 @@ export function MethodCards() {
                   className="object-contain"
                 />
               </div>
-              <h3 className="mb-2 mt-4.5 text-[19px] font-bold tracking-[-0.01em]">
-                {card.title}
+              <h3 className="mb-2 mt-4.5 flex items-start gap-2.5 text-[19px] font-bold tracking-[-0.01em]">
+                <span className="mt-0.5 flex-none">{card.icon}</span>
+                <span>{card.title}</span>
               </h3>
               <p className="m-0 text-[15.5px] text-muted">{card.body}</p>
             </div>
