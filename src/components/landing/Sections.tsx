@@ -78,15 +78,16 @@ export function MethodCards() {
         <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
           {methodCards.map((card) => (
             <div key={card.title} className={CARD}>
-              {/* Fond sombre : les illustrations sont sur fond noir, elles
-                  occupent toute la vignette plutôt que d'y flotter. */}
-              <div className="relative h-30 overflow-hidden rounded-xl bg-ink">
+              {/* Vignette en 16:9, le format natif des illustrations, et
+                  `contain` pour n'en rien couper. Le fond sombre absorbe
+                  l'éventuel filet laissé sur les côtés. */}
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
                 <Image
                   src={card.image}
                   alt=""
                   fill
-                  sizes="(min-width: 900px) 320px, 100vw"
-                  className="object-cover"
+                  sizes="(min-width: 900px) 320px, calc(100vw - 72px)"
+                  className="object-contain"
                 />
               </div>
               <h3 className="mb-2 mt-4.5 text-[19px] font-bold tracking-[-0.01em]">
