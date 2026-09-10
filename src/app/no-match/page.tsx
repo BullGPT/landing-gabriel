@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function NoMatchPage() {
   return (
     <main className="flex min-h-screen items-center justify-center px-5 py-12">
-      <div className="max-w-[620px] rounded-2xl border border-line bg-white p-[clamp(26px,5vw,40px)]">
+      <div className="max-w-[620px] border border-line bg-white p-[clamp(26px,5vw,40px)]">
         <h1 className="m-0 text-[clamp(26px,5vw,36px)] font-extrabold leading-[1.1] tracking-[-0.025em] text-pretty">
           Todavía no es tu momento para el acompañamiento,
           <br />

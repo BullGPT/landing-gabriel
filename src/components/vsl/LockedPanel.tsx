@@ -13,17 +13,17 @@ export function LockedPanel({ elapsed }: { elapsed: number }) {
   return (
     <div
       aria-live="polite"
-      className="relative overflow-hidden rounded-2xl border border-line bg-white"
+      className="relative overflow-hidden border border-line bg-white"
     >
       <div
         aria-hidden
         className="pointer-events-none flex select-none flex-col gap-3.5 px-6 py-7 opacity-50 blur-[6px]"
       >
-        <div className="h-3.5 w-45 rounded-md bg-line" />
-        <div className="h-13 rounded-[10px] border border-line bg-surface" />
-        <div className="h-13 rounded-[10px] border border-line bg-surface" />
-        <div className="h-13 rounded-[10px] border border-line bg-surface" />
-        <div className="h-13 rounded-[10px] bg-brand-line" />
+        <div className="h-3.5 w-45 bg-line" />
+        <div className="h-13 border border-line bg-surface" />
+        <div className="h-13 border border-line bg-surface" />
+        <div className="h-13 border border-line bg-surface" />
+        <div className="h-13 bg-brand-line" />
       </div>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/82 px-5.5 py-7 text-center">
@@ -51,9 +51,9 @@ export function LockedPanel({ elapsed }: { elapsed: number }) {
           conoce el método.
         </p>
 
-        <div className="mt-5 h-1.5 w-full max-w-[420px] overflow-hidden rounded-full bg-line">
+        <div className="mt-5 h-1.5 w-full max-w-[420px] overflow-hidden bg-line">
           <div
-            className="h-full rounded-full bg-brand transition-[width] duration-500 ease-linear"
+            className="h-full bg-brand transition-[width] duration-500 ease-linear"
             style={{ width: `${percent}%` }}
           />
         </div>

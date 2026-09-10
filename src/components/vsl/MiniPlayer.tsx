@@ -38,16 +38,16 @@ export function MiniPlayer() {
     <div
       className={
         wide
-          ? "fixed bottom-5 right-5 z-55 flex w-[340px] items-center gap-3 rounded-2xl border border-line bg-white p-3 shadow-[0_10px_34px_rgba(16,26,61,.12)]"
+          ? "fixed bottom-5 right-5 z-55 flex w-[340px] items-center gap-3 border border-line bg-white p-3 shadow-[0_10px_34px_rgba(16,26,61,.12)]"
           : "fixed inset-x-0 bottom-19 z-55 flex items-center gap-2.5 border-t border-line bg-white px-3.5 py-2.5"
       }
     >
-      <div className="aspect-video w-24 flex-none rounded-lg bg-[repeating-linear-gradient(135deg,#F8FAFF_0_8px,#F5F7FB_8px_16px)]" />
+      <div className="aspect-video w-24 flex-none bg-[repeating-linear-gradient(135deg,#F8FAFF_0_8px,#F5F7FB_8px_16px)]" />
       <div className="min-w-0 flex-1">
         <div className="truncate text-[13px] font-semibold">
           Método IA · 24 min
         </div>
-        <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-line">
+        <div className="mt-1.5 h-1 overflow-hidden bg-line">
           <div
             className="h-full bg-brand transition-[width] duration-500 ease-linear"
             style={{ width: `${percent}%` }}
@@ -60,7 +60,7 @@ export function MiniPlayer() {
       <button
         type="button"
         onClick={() => controls.toggle(progress.playing)}
-        className="flex-none cursor-pointer rounded-lg border-none bg-brand px-3 py-2 text-[12.5px] font-semibold text-white"
+        className="flex-none cursor-pointer border-none bg-brand px-3 py-2 text-[12.5px] font-semibold text-white"
       >
         {progress.playing ? "Pausa" : "Reproducir"}
       </button>

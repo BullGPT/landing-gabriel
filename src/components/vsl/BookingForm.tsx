@@ -29,7 +29,7 @@ const EMPTY_CONTACT: Contact = {
 };
 
 const INPUT_CLASS =
-  "w-full rounded-[10px] border border-line bg-white px-3.5 py-[15px] text-base text-ink outline-none transition-colors focus:border-brand";
+  "w-full border border-line bg-white px-3.5 py-[15px] text-base text-ink outline-none transition-colors focus:border-brand";
 
 /**
  * Formulaire de réservation.
@@ -98,9 +98,9 @@ export function BookingForm({ justUnlocked }: { justUnlocked: boolean }) {
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-white px-[clamp(20px,4vw,28px)] py-[clamp(22px,4vw,30px)]">
+    <div className="border border-line bg-white px-[clamp(20px,4vw,28px)] py-[clamp(22px,4vw,30px)]">
       {justUnlocked && (
-        <div className="mb-5 flex items-center gap-3 rounded-[10px] bg-brand-tint px-3.5 py-3 [animation:fadeUp_.45s_ease_both]">
+        <div className="mb-5 flex items-center gap-3 bg-brand-tint px-3.5 py-3 [animation:fadeUp_.45s_ease_both]">
           <svg
             width="24"
             height="26"
@@ -139,7 +139,7 @@ export function BookingForm({ justUnlocked }: { justUnlocked: boolean }) {
             </span>
             <span>{Math.round(((current + 1) / total) * 100)}%</span>
           </div>
-          <div className="mt-2 h-1 overflow-hidden rounded-full bg-line">
+          <div className="mt-2 h-1 overflow-hidden bg-line">
             <div
               className="h-full bg-brand transition-[width] duration-300"
               style={{ width: `${((current + 1) / total) * 100}%` }}
@@ -175,16 +175,16 @@ export function BookingForm({ justUnlocked }: { justUnlocked: boolean }) {
                       type="button"
                       onClick={() => pick(question, option)}
                       aria-pressed={on}
-                      className={`flex w-full cursor-pointer items-center gap-3 rounded-[10px] border px-4 py-[15px] text-left text-base text-ink ${
+                      className={`flex w-full cursor-pointer items-center gap-3 border px-4 py-[15px] text-left text-base text-ink ${
                         on
                           ? "border-brand bg-brand-tint font-semibold"
                           : "border-line bg-white font-normal"
                       }`}
                     >
+                      {/* Choix simple et multiple partagent la même marque
+                          carrée, la page n'utilise aucun angle arrondi. */}
                       <span
                         className={`h-[18px] w-[18px] flex-none border ${
-                          question.multi ? "rounded-[5px]" : "rounded-full"
-                        } ${
                           on
                             ? "border-brand bg-brand shadow-[inset_0_0_0_3px_#FFFFFF]"
                             : "border-brand-line bg-white"
@@ -237,7 +237,7 @@ export function BookingForm({ justUnlocked }: { justUnlocked: boolean }) {
                       onChange={(e) =>
                         setContact((c) => ({ ...c, prefijo: e.target.value }))
                       }
-                      className="flex-none basis-28 rounded-[10px] border border-line bg-white px-2 py-[15px] text-base text-ink outline-none focus:border-brand"
+                      className="flex-none basis-28 border border-line bg-white px-2 py-[15px] text-base text-ink outline-none focus:border-brand"
                     >
                       {phonePrefixes.map((prefix) => (
                         <option key={prefix.value} value={prefix.value}>
@@ -292,7 +292,7 @@ export function BookingForm({ justUnlocked }: { justUnlocked: boolean }) {
           <button
             type="button"
             onClick={() => setStep((s) => Math.max(0, s - 1))}
-            className="h-14 flex-none cursor-pointer rounded-[10px] border border-line bg-white px-5 text-sm font-semibold text-muted"
+            className="h-14 flex-none cursor-pointer border border-line bg-white px-5 text-sm font-semibold text-muted"
           >
             Atrás
           </button>
@@ -301,7 +301,7 @@ export function BookingForm({ justUnlocked }: { justUnlocked: boolean }) {
           type="button"
           onClick={handleNext}
           disabled={submitting}
-          className="h-14 flex-1 cursor-pointer rounded-[10px] border-none bg-brand text-[15px] font-bold uppercase tracking-[0.06em] text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-14 flex-1 cursor-pointer border-none bg-brand text-[15px] font-bold uppercase tracking-[0.06em] text-white transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting
             ? "Enviando..."

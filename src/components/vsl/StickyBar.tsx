@@ -30,7 +30,7 @@ export function StickyBar() {
         type="button"
         onClick={() => scrollToId(unlocked ? FORM_ID : PLAYER_ID, 70)}
         aria-live="polite"
-        className={`flex h-14 w-full cursor-pointer items-center justify-center gap-2.5 rounded-[10px] border-none text-[15px] font-bold uppercase tracking-[0.05em] ${
+        className={`flex h-14 w-full cursor-pointer items-center justify-center gap-2.5 border-none text-[15px] font-bold uppercase tracking-[0.05em] ${
           unlocked ? "bg-brand text-white" : "bg-chip text-faint"
         }`}
       >

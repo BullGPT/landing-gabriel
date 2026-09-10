@@ -14,7 +14,7 @@ export function FinalCta() {
     <button
       type="button"
       onClick={() => scrollToId(unlocked ? FORM_ID : PLAYER_ID, 70)}
-      className={`mt-7 inline-flex h-15 w-full max-w-[360px] cursor-pointer items-center justify-center gap-2.5 rounded-[10px] border-none text-[15px] font-bold uppercase tracking-[0.06em] ${
+      className={`mt-7 inline-flex h-15 w-full max-w-[360px] cursor-pointer items-center justify-center gap-2.5 border-none text-[15px] font-bold uppercase tracking-[0.06em] ${
         unlocked ? "bg-white text-brand" : "bg-white/22 text-white"
       }`}
     >

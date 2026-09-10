@@ -37,7 +37,7 @@ export function CookieBanner() {
 
   return (
     <div
-      className={`fixed z-50 flex flex-wrap items-center gap-2.5 rounded-xl border border-line bg-white px-3.5 py-3 shadow-[0_8px_28px_rgba(16,26,61,.1)] ${
+      className={`fixed z-50 flex flex-wrap items-center gap-2.5 border border-line bg-white px-3.5 py-3 shadow-[0_8px_28px_rgba(16,26,61,.1)] ${
         wide ? "bottom-5 left-5 max-w-[420px]" : "inset-x-3 bottom-36"
       }`}
     >
@@ -48,14 +48,14 @@ export function CookieBanner() {
         <button
           type="button"
           onClick={() => decide("rejected")}
-          className="cursor-pointer rounded-lg border border-line bg-transparent px-3.5 py-2.5 text-[12.5px] text-muted"
+          className="cursor-pointer border border-line bg-transparent px-3.5 py-2.5 text-[12.5px] text-muted"
         >
           Rechazar
         </button>
         <button
           type="button"
           onClick={() => decide("accepted")}
-          className="cursor-pointer rounded-lg border-none bg-brand px-3.5 py-2.5 text-[12.5px] font-semibold text-white"
+          className="cursor-pointer border-none bg-brand px-3.5 py-2.5 text-[12.5px] font-semibold text-white"
         >
           Aceptar
         </button>

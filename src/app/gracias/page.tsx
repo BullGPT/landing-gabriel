@@ -45,7 +45,7 @@ export default function GraciasPage() {
             {steps.map((step, index) => (
               <div
                 key={step.title}
-                className="rounded-2xl border border-line bg-white p-6"
+                className="border border-line bg-white p-6"
               >
                 <span className="font-mono text-[11px] tracking-[0.12em] text-brand">
                   {String(index + 1).padStart(2, "0")}

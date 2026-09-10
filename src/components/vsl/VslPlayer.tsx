@@ -23,9 +23,9 @@ export function VslPlayer() {
 
   return (
     <>
-      <div className="rounded-2xl border border-line bg-white p-2.5">
+      <div className="border border-line bg-white p-2.5">
         <div
-          className={`relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-[10px] ${HATCH}`}
+          className={`relative flex aspect-video w-full items-center justify-center overflow-hidden ${HATCH}`}
         >
           {useVimeo && progress.started && (
             <iframe
@@ -70,7 +70,7 @@ export function VslPlayer() {
 
         {/* Barre non cliquable : on ne peut pas se téléporter à la fin. */}
         <div
-          className="mt-2.5 h-[5px] overflow-hidden rounded-full bg-line"
+          className="mt-2.5 h-[5px] overflow-hidden bg-line"
           role="progressbar"
           aria-label="Progreso del vídeo"
           aria-valuemin={0}
@@ -88,14 +88,14 @@ export function VslPlayer() {
             <button
               type="button"
               onClick={() => controls.toggle(progress.playing)}
-              className="cursor-pointer rounded-lg border-none bg-brand px-3.5 py-2.5 text-[13px] font-semibold text-white"
+              className="cursor-pointer border-none bg-brand px-3.5 py-2.5 text-[13px] font-semibold text-white"
             >
               {progress.playing ? "Pausa" : "Reproducir"}
             </button>
             <button
               type="button"
               onClick={controls.back10}
-              className="cursor-pointer rounded-lg border border-line bg-white px-3.5 py-2.5 text-[13px] font-medium text-muted"
+              className="cursor-pointer border border-line bg-white px-3.5 py-2.5 text-[13px] font-medium text-muted"
             >
               −10s
             </button>
@@ -104,7 +104,7 @@ export function VslPlayer() {
               disabled
               aria-disabled
               title="No se puede adelantar"
-              className="cursor-not-allowed rounded-lg border border-line bg-surface px-3.5 py-2.5 text-[13px] text-disabled"
+              className="cursor-not-allowed border border-line bg-surface px-3.5 py-2.5 text-[13px] text-disabled"
             >
               +10s
             </button>

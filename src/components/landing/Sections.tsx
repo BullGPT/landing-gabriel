@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { site } from "@/config/site";
 
-const CARD = "rounded-2xl border border-line bg-white p-6";
+const CARD = "border border-line bg-white p-6";
 const H2 =
   "m-0 text-[clamp(26px,5.4vw,38px)] font-extrabold leading-[1.1] tracking-[-0.025em]";
 
@@ -82,7 +82,7 @@ export function MethodCards() {
               {/* Vignette en 16:9, le format natif des illustrations, et
                   `contain` pour n'en rien couper. Le fond sombre absorbe
                   l'éventuel filet laissé sur les côtés. */}
-              <div className="relative aspect-video overflow-hidden rounded-xl bg-ink">
+              <div className="relative aspect-video overflow-hidden bg-ink">
                 <Image
                   src={card.image}
                   alt=""
@@ -158,7 +158,7 @@ export function SocialProofSlots() {
           {slots.map((slot) => (
             <div
               key={slot.title}
-              className="flex min-h-45 flex-col justify-center gap-2 rounded-2xl border border-dashed border-brand-line bg-surface p-6"
+              className="flex min-h-45 flex-col justify-center gap-2 border border-dashed border-brand-line bg-surface p-6"
             >
               <span className="font-mono text-[11px] tracking-[0.1em] text-brand">
                 POR RELLENAR
@@ -168,7 +168,7 @@ export function SocialProofSlots() {
             </div>
           ))}
 
-          <div className="flex min-h-45 flex-col justify-center gap-2 rounded-2xl border border-dashed border-white/50 bg-brand p-6 text-white">
+          <div className="flex min-h-45 flex-col justify-center gap-2 border border-dashed border-white/50 bg-brand p-6 text-white">
             <span className="font-mono text-[11px] tracking-[0.1em] text-white/80">
               POR RELLENAR
             </span>
@@ -307,7 +307,7 @@ export function Qualification() {
 
         <div className="mt-7 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
           <div className={CARD}>
-            <span className="inline-block rounded-full bg-danger-tint px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] text-danger">
+            <span className="inline-block bg-danger-tint px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] text-danger">
               NO ES PARA TI SI
             </span>
             <ul className="m-0 mt-4.5 flex list-none flex-col gap-3.5 p-0">
@@ -331,8 +331,8 @@ export function Qualification() {
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-brand-line bg-white p-6">
-            <span className="inline-block rounded-full bg-brand-tint px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] text-brand">
+          <div className="border border-brand-line bg-white p-6">
+            <span className="inline-block bg-brand-tint px-3 py-1.5 font-mono text-[11px] tracking-[0.12em] text-brand">
               SÍ ES PARA TI SI
             </span>
             <ul className="m-0 mt-4.5 flex list-none flex-col gap-3.5 p-0">
