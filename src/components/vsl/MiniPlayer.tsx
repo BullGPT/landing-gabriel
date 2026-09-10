@@ -45,7 +45,7 @@ export function MiniPlayer() {
       <div className="aspect-video w-24 flex-none bg-[repeating-linear-gradient(135deg,#F8FAFF_0_8px,#F5F7FB_8px_16px)]" />
       <div className="min-w-0 flex-1">
         <div className="truncate text-[13px] font-semibold">
-          Método IA · 24 min
+          Método Rumbo · 24 min
         </div>
         <div className="mt-1.5 h-1 overflow-hidden bg-line">
           <div

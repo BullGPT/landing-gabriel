@@ -22,7 +22,7 @@ export const faqs = [
   },
   {
     q: "¿Es una sala de señales?",
-    a: "No. Si mañana desaparecemos, tú sigues sabiendo operar. Ese es literalmente el criterio para distinguir una formación de una suscripción a la dependencia.",
+    a: "No. El método Rumbo se aprende: si mañana desaparecemos, tú sigues sabiendo operar. Ese es literalmente el criterio para distinguir una formación de una suscripción a la dependencia.",
   },
   { q: "¿Cuánto dura la llamada?", a: "Treinta minutos." },
   {

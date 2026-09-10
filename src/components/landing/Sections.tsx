@@ -66,7 +66,10 @@ export function MethodCards() {
   return (
     <section className="px-5 pt-[clamp(44px,7vw,80px)]">
       <div className="mx-auto max-w-[1000px]">
-        <h2 className={`${H2} text-pretty`}>
+        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+          El método Rumbo
+        </div>
+        <h2 className={`${H2} mt-3.5 text-pretty`}>
           El trabajo que te llevaba tres años aprender,
           <br />
           <span className="text-brand">ahora lo hace la máquina.</span>
@@ -240,7 +243,7 @@ const callSteps = [
   },
   {
     title: "Te decimos si encajas o no",
-    body: "Si el sistema encaja con tu caso, te explicamos exactamente cómo funciona el programa. Si no encaja, te lo decimos igual y la llamada se acaba ahí.",
+    body: "Si el método Rumbo encaja con tu caso, te explicamos exactamente cómo funciona el programa. Si no encaja, te lo decimos igual y la llamada se acaba ahí.",
   },
   {
     title: "Sales con un diagnóstico, decidas lo que decidas",

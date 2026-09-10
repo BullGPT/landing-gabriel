@@ -48,7 +48,7 @@ export function LockedPanel({ elapsed }: { elapsed: number }) {
         </h2>
         <p className="mt-2.5 max-w-[44ch] text-[15.5px] text-muted">
           Se desbloquea cuando termines el vídeo. Solo hablamos con gente que ya
-          conoce el método.
+          conoce el método Rumbo.
         </p>
 
         <div className="mt-5 h-1.5 w-full max-w-[420px] overflow-hidden bg-line">

@@ -20,7 +20,7 @@ export default function LandingPage() {
     // Marge basse : la barre d'action fixe ne doit pas masquer le footer.
     <div className="pb-24">
       <div className="bg-brand px-4 py-2.5 text-center text-[13px] tracking-[0.04em] text-white">
-        NUEVO · MÉTODO IMPORTADO DE EE.UU.
+        NUEVO · EL MÉTODO RUMBO LLEGA DE EE.UU.
       </div>
 
       <Header />
@@ -36,11 +36,11 @@ export default function LandingPage() {
             <span className="text-brand">una hora al día.</span>
           </h1>
           <p className="mx-auto mt-4.5 max-w-[60ch] text-[16.5px] text-muted text-pretty">
-            Dentro del vídeo está el método completo que usan los traders
-            americanos para operar con criterio propio: sin años estudiando
-            análisis técnico, sin copiar las señales de nadie y sin pasar el día
-            delante de una pantalla. Dura 24 minutos. Ponlo con sonido y míralo
-            entero.
+            Dentro del vídeo está el método Rumbo al completo: el sistema que usan
+            los traders americanos para operar con criterio propio, sin años
+            estudiando análisis técnico, sin copiar las señales de nadie y sin
+            pasar el día delante de una pantalla. Dura 24 minutos. Ponlo con
+            sonido y míralo entero.
           </p>
         </section>
 

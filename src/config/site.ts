@@ -12,7 +12,7 @@ export const site = {
   seo: {
     title: "Vive del trading con inteligencia artificial | Rumbo",
     description:
-      "El método completo que usan los traders americanos para operar con criterio propio, una hora al día. Vídeo de 24 minutos, acceso inmediato.",
+      "El método Rumbo al completo: el sistema que usan los traders americanos para operar con criterio propio, una hora al día. Vídeo de 24 minutos, acceso inmediato.",
     ogImage: "/og.jpg",
   },
 

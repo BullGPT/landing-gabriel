@@ -22,7 +22,7 @@ export default function NoMatchPage() {
         <p className="mt-5 text-[16.5px] text-muted">
           El programa completo incluye seguimiento directo, y eso solo tiene
           sentido si estás en condiciones de aprovecharlo. Mientras tanto, puedes
-          empezar por tu cuenta con {site.midTicketName}: es el mismo método, sin
+          empezar por tu cuenta con {site.midTicketName}: es el mismo método Rumbo, sin
           el acompañamiento. Cuando estés listo, hablamos.
         </p>
         <p className="mt-6.5 text-[11.5px] text-faint">{site.legal.riskWarning}</p>

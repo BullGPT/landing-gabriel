@@ -31,7 +31,7 @@ export function VslPlayer() {
             <iframe
               ref={iframeRef}
               src={vimeoSrc(vimeoId, hash)}
-              title="Método IA · 24 min"
+              title="Método Rumbo · 24 min"
               className="absolute inset-0 h-full w-full border-0"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
