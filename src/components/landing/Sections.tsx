@@ -157,6 +157,11 @@ function VideoTestimonial() {
     autopause: "0",
     player_id: "0",
     app_id: "58479",
+    // Habillage masqué côté URL en plus des réglages Vimeo : si quelqu'un
+    // les rouvre un jour dans le tableau de bord, le lecteur reste nu.
+    title: "0",
+    byline: "0",
+    portrait: "0",
     // Coupe le pistage Vimeo : la page cible l'Espagne et affiche un bandeau cookies.
     dnt: "1",
   });
