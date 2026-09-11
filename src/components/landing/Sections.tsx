@@ -167,11 +167,11 @@ function VideoTestimonial() {
   });
 
   return (
-    <div className="mx-auto mt-7 w-full max-w-[320px] border border-line bg-white p-2.5">
+    <figure className="mx-auto mt-7 w-full max-w-[320px] bg-brand p-2.5">
       <div className="relative aspect-[9/16] w-full overflow-hidden bg-ink">
         <iframe
           src={`https://player.vimeo.com/video/1225758409?${params.toString()}`}
-          title="Testimonio de un alumno"
+          title="Testimonio de Lina"
           loading="lazy"
           allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
@@ -179,7 +179,10 @@ function VideoTestimonial() {
           className="absolute inset-0 h-full w-full border-0"
         />
       </div>
-    </div>
+      <figcaption className="mt-2.5 bg-white px-3 py-2 text-center text-[13.5px] font-bold text-ink">
+        Lina, 23 años · +4.000 € de beneficio
+      </figcaption>
+    </figure>
   );
 }
 
