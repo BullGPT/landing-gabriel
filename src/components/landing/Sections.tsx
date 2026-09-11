@@ -230,6 +230,31 @@ export function SocialProofSlots() {
             </span>
           </div>
         </div>
+
+        {/* Lien sortant : contour plutôt que plein, pour ne pas concurrencer
+            le bouton de réservation qui est le seul CTA de la page. */}
+        <div className="mt-7 text-center">
+          <a
+            href="https://www.trustpilot.com/review/bullgpt.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex h-13 items-center justify-center gap-2.5 border border-line bg-white px-6 text-sm font-bold uppercase tracking-[0.06em] text-ink no-underline transition-colors hover:border-brand hover:text-brand hover:no-underline"
+          >
+            Ver nuestras opiniones
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              aria-hidden
+            >
+              <path d="M5 2H2v10h10V9" />
+              <path d="M8 2h4v4M12 2L6.5 7.5" />
+            </svg>
+          </a>
+        </div>
       </div>
     </section>
   );
