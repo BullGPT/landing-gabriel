@@ -142,16 +142,40 @@ export function UsaGap() {
   );
 }
 
-/**
- * Emplacements de preuve sociale, laissés vides à dessein dans la maquette :
- * il n'y a pas de faux témoignage, chaque carte indique ce qu'il faut fournir.
- */
+const testimonials = [
+  {
+    videoId: "1225758409",
+    name: "Lesly",
+    caption: "Lesly: inició con 500 $ y ya es una trader rentable",
+  },
+  {
+    videoId: "1226378721",
+    name: "Guillermo",
+    caption: "Guillermo: pasó de trabajar como camarero a operar 1 h al día",
+  },
+  {
+    videoId: "1226378998",
+    name: "Pepe",
+    caption:
+      "Pepe: consiguió dejar su trabajo y ahora opera 2 h al día con absoluta libertad en su vida",
+  },
+];
+
 /**
  * Témoignage vidéo, tourné au format vertical (9:16).
- * `loading="lazy"` compte ici : l'iframe est loin sous la ligne de flottaison,
- * et un lecteur Vimeo pèse lourd. Il ne se charge qu'à l'approche.
+ * `loading="lazy"` compte ici : trois lecteurs Vimeo pèsent lourd et la
+ * section est loin sous la ligne de flottaison. Ils ne se chargent qu'à
+ * l'approche, sinon la VSL en haut de page ralentit pour tout le monde.
  */
-function VideoTestimonial() {
+function VideoTestimonial({
+  videoId,
+  name,
+  caption,
+}: {
+  videoId: string;
+  name: string;
+  caption: string;
+}) {
   const params = new URLSearchParams({
     badge: "0",
     autopause: "0",
@@ -167,11 +191,11 @@ function VideoTestimonial() {
   });
 
   return (
-    <figure className="mx-auto mt-7 w-full max-w-[320px] bg-brand p-2.5">
+    <figure className="m-0 flex flex-col bg-brand p-2.5">
       <div className="relative aspect-[9/16] w-full overflow-hidden bg-ink">
         <iframe
-          src={`https://player.vimeo.com/video/1225758409?${params.toString()}`}
-          title="Testimonio de Lesly"
+          src={`https://player.vimeo.com/video/${videoId}?${params.toString()}`}
+          title={`Testimonio de ${name}`}
           loading="lazy"
           allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
@@ -179,25 +203,16 @@ function VideoTestimonial() {
           className="absolute inset-0 h-full w-full border-0"
         />
       </div>
-      <figcaption className="mt-2.5 bg-white px-3 py-2 text-center text-[13.5px] font-bold text-ink">
-        Lesly: inició con 500 $ y ya es una trader rentable
+      {/* Hauteur minimale : les trois légendes n'ont pas la même longueur,
+          sans elle les cadres bleus ne s'alignent plus en bas. */}
+      <figcaption className="mt-2.5 flex min-h-[4.5rem] items-center justify-center bg-white px-3 py-2 text-center text-[13.5px] font-bold text-ink">
+        {caption}
       </figcaption>
     </figure>
   );
 }
 
 export function SocialProofSlots() {
-  const slots = [
-    {
-      title: "Testimonio en texto",
-      body: "Cita real + nombre y ciudad del alumno.",
-    },
-    {
-      title: "Captura de mensaje",
-      body: "Captura real de WhatsApp o del grupo.",
-    },
-  ];
-
   return (
     <section className="px-5 pt-[clamp(44px,7vw,80px)]">
       <div className="mx-auto max-w-[1000px]">
@@ -207,31 +222,10 @@ export function SocialProofSlots() {
           <span className="text-brand">que tú.</span>
         </h2>
 
-        <VideoTestimonial />
-
-        <div className="mt-7 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-4">
-          {slots.map((slot) => (
-            <div
-              key={slot.title}
-              className="flex min-h-45 flex-col justify-center gap-2 border border-dashed border-brand-line bg-surface p-6"
-            >
-              <span className="font-mono text-[11px] tracking-[0.1em] text-brand">
-                POR RELLENAR
-              </span>
-              <span className="font-bold">{slot.title}</span>
-              <span className="text-[14.5px] text-muted">{slot.body}</span>
-            </div>
+        <div className="mt-7 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] items-stretch gap-4">
+          {testimonials.map((person) => (
+            <VideoTestimonial key={person.videoId} {...person} />
           ))}
-
-          <div className="flex min-h-45 flex-col justify-center gap-2 border border-dashed border-white/50 bg-brand p-6 text-white">
-            <span className="font-mono text-[11px] tracking-[0.1em] text-white/80">
-              POR RELLENAR
-            </span>
-            <span className="font-bold">Cita destacada</span>
-            <span className="text-[14.5px] text-white/80">
-              La frase más fuerte, en tarjeta azul.
-            </span>
-          </div>
         </div>
 
         {/* Lien sortant : contour plutôt que plein, pour ne pas concurrencer
