@@ -19,10 +19,6 @@ export default function LandingPage() {
   return (
     // Marge basse : la barre d'action fixe ne doit pas masquer le footer.
     <div className="pb-24">
-      <div className="bg-brand px-4 py-2.5 text-center text-[13px] tracking-[0.04em] text-white">
-        NUEVO · EL MÉTODO RUMBO LLEGA DE EE.UU.
-      </div>
-
       <Header />
 
       <main>
