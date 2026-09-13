@@ -171,7 +171,7 @@ function VideoTestimonial() {
       <div className="relative aspect-[9/16] w-full overflow-hidden bg-ink">
         <iframe
           src={`https://player.vimeo.com/video/1225758409?${params.toString()}`}
-          title="Testimonio de Lina"
+          title="Testimonio de Lesly"
           loading="lazy"
           allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
@@ -180,7 +180,7 @@ function VideoTestimonial() {
         />
       </div>
       <figcaption className="mt-2.5 bg-white px-3 py-2 text-center text-[13.5px] font-bold text-ink">
-        Lina, 23 años · +4.000 € de beneficio
+        Lesly: inició con 500 $ y ya es una trader rentable
       </figcaption>
     </figure>
   );
