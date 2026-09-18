@@ -7,6 +7,9 @@ const SDK_URL = "https://player.vimeo.com/api/player.js";
 
 type VimeoPlayer = {
   on(event: string, handler: (data: { seconds: number }) => void): void;
+  ready(): Promise<void>;
+  setVolume(volume: number): Promise<number>;
+  setMuted(muted: boolean): Promise<boolean>;
   play(): Promise<void>;
   pause(): Promise<void>;
   getCurrentTime(): Promise<number>;
@@ -62,8 +65,7 @@ export const vimeo = {
  * pas un minuteur. Sans cela, le déverrouillage se contournerait en laissant
  * l'onglet ouvert sans regarder.
  *
- * NON TESTÉ tant qu'aucun `vimeoId` n'est configuré — il n'y a pas encore de
- * vidéo à charger. À vérifier le jour où la VSL est en ligne.
+ * Activer le pont une fois l'iframe montée, après le premier clic de lecture.
  */
 export function useVimeoBridge(enabled: boolean) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -80,6 +82,12 @@ export function useVimeoBridge(enabled: boolean) {
         if (cancelled || !window.Vimeo) return;
         const player = new window.Vimeo.Player(iframe);
         instance = player;
+
+        // Initialise le volume une seule fois, sans écraser les choix ultérieurs.
+        void player.ready().then(async () => {
+          if (cancelled) return;
+          await Promise.allSettled([player.setVolume(1), player.setMuted(false)]);
+        }).catch(() => {});
 
         player.on("timeupdate", (data) => playback.setTime(data.seconds));
         player.on("play", () => playback.markPlaying(true));

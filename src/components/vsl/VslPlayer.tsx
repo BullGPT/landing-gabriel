@@ -9,15 +9,14 @@ const HATCH =
   "bg-[repeating-linear-gradient(135deg,#F8FAFF_0_12px,#F5F7FB_12px_24px)]";
 
 /**
- * Lecteur de la VSL avec contrôles maison.
- * Il n'y a délibérément aucun moyen d'avancer : pause et retour arrière
- * seulement. C'est ce qui donne son sens au déverrouillage du formulaire.
+ * Lecteur Vimeo avec commandes natives, dont le réglage du volume.
+ * Les boutons sous la vidéo conservent les raccourcis pause et retour arrière.
  */
 export function VslPlayer() {
   const progress = useProgress();
   const { vimeoId, hash, durationSeconds } = site.vsl;
   const useVimeo = vimeoId !== null;
-  const iframeRef = useVimeoBridge(useVimeo);
+  const iframeRef = useVimeoBridge(useVimeo && progress.started);
 
   const percent = Math.min(100, (progress.t / durationSeconds) * 100);
 
@@ -31,9 +30,10 @@ export function VslPlayer() {
             <iframe
               ref={iframeRef}
               src={vimeoSrc(vimeoId, hash)}
-              title="Método Rumbo · 24 min"
+              title="Masterclass Rumbo"
               className="absolute inset-0 h-full w-full border-0"
-              allow="autoplay; fullscreen; picture-in-picture"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             />
           )}
@@ -51,7 +51,7 @@ export function VslPlayer() {
                 </svg>
               </span>
               <span className="px-4 text-center font-mono text-[11px] uppercase tracking-[0.1em] text-muted">
-                [ MINIATURA + EMBED VSL 24 MIN ]
+                {useVimeo ? "Ver la masterclass" : "[ MINIATURA + EMBED VSL 16 MIN ]"}
               </span>
             </button>
           )}
@@ -68,7 +68,7 @@ export function VslPlayer() {
           )}
         </div>
 
-        {/* Barre non cliquable : on ne peut pas se téléporter à la fin. */}
+        {/* Indicateur de progression synchronisé avec Vimeo. */}
         <div
           className="mt-2.5 h-[5px] overflow-hidden bg-line"
           role="progressbar"
@@ -99,15 +99,6 @@ export function VslPlayer() {
             >
               −10s
             </button>
-            <button
-              type="button"
-              disabled
-              aria-disabled
-              title="No se puede adelantar"
-              className="cursor-not-allowed border border-line bg-surface px-3.5 py-2.5 text-[13px] text-disabled"
-            >
-              +10s
-            </button>
           </div>
           <span className="font-mono text-xs text-faint">
             {formatClock(progress.t)} / {formatClock(durationSeconds)}
@@ -116,7 +107,7 @@ export function VslPlayer() {
       </div>
 
       <p className="mt-3 text-center font-mono text-[11.5px] tracking-[0.08em] text-faint">
-        1 vídeo · 24 minutos · acceso inmediato
+        1 vídeo · 16 minutos · acceso inmediato
       </p>
     </>
   );
@@ -125,12 +116,13 @@ export function VslPlayer() {
 function vimeoSrc(id: string, hash: string | null) {
   const params = new URLSearchParams({
     badge: "0",
+    autopause: "0",
     byline: "0",
     portrait: "0",
     title: "0",
     dnt: "1",
-    // Chrome Vimeo masqué : la progression passe par nos propres boutons.
-    controls: "0",
+    // Affiche les commandes Vimeo, notamment le volume et le plein écran.
+    controls: "1",
     autoplay: "1",
   });
   if (hash) params.set("h", hash);

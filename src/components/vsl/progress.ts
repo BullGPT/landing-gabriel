@@ -13,7 +13,7 @@ import { site } from "@/config/site";
  * localStorage dans un effet, ce qui déclencherait des rendus en cascade.
  */
 
-const STORAGE_KEY = "vsl_progress_v1";
+const STORAGE_KEY = `vsl_progress_v1_${site.vsl.vimeoId ?? "preview"}`;
 
 export type Progress = {
   /** Position de lecture, en secondes. */

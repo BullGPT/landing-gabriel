@@ -33,7 +33,7 @@ export default function LandingPage() {
           </h1>
           <p className="mx-auto mt-4.5 max-w-[54ch] text-[16.5px] text-muted text-pretty">
             El método Rumbo al completo, sin años de análisis técnico ni señales
-            de nadie. Dura 24 minutos: ponlo con sonido y míralo entero.
+            de nadie. Dura 16 minutos: ponlo con sonido y míralo entero.
           </p>
         </section>
 

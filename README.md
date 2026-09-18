@@ -1,5 +1,19 @@
 # Landing VSL — marché espagnol
 
+## Parcours actuel
+
+La masterclass Vimeo est suivie immédiatement du formulaire et du calendrier
+Klosers, intégrés dans `KlosersBooking.tsx`. La réservation est accessible sans
+attendre la fin de la vidéo ; tous les boutons de réservation pointent vers ce
+bloc. L'URL est configurable dans `site.booking.url`.
+
+Klosers gère les coordonnées, les créneaux et la confirmation. Le formulaire
+historique `BookingForm`, `/api/lead` et ses redirections ne sont plus utilisés
+par ce parcours. Le texte ci-dessous décrit cette ancienne implémentation et
+ses réglages vidéo initiaux.
+
+## Implémentation initiale
+
 Implémentation de la maquette Claude Design « Landing VSL Llamada »
 (sources dans [`design/`](design/)).
 
