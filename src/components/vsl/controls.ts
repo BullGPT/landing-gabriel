@@ -14,8 +14,7 @@ const hasVimeo = () => site.vsl.vimeoId !== null;
 export const controls = {
   play() {
     if (hasVimeo()) {
-      // `started` fait apparaître l'iframe ; le SDK prend le relais ensuite.
-      playback.markPlaying(true);
+      // Le lecteur est déjà monté ; les événements Vimeo confirment la lecture.
       vimeo.play();
     } else {
       playback.play();

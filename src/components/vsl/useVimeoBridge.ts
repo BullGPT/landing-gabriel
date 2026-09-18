@@ -62,10 +62,9 @@ export const vimeo = {
 
 /**
  * Relie le lecteur Vimeo au store : c'est la vidéo réelle qui donne l'heure,
- * pas un minuteur. Sans cela, le déverrouillage se contournerait en laissant
- * l'onglet ouvert sans regarder.
+ * pas un minuteur.
  *
- * Activer le pont une fois l'iframe montée, après le premier clic de lecture.
+ * Le lecteur est monté dès l’arrivée pour afficher son aperçu natif.
  */
 export function useVimeoBridge(enabled: boolean) {
   const iframeRef = useRef<HTMLIFrameElement>(null);

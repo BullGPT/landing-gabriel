@@ -16,7 +16,7 @@ export function VslPlayer() {
   const progress = useProgress();
   const { vimeoId, hash, durationSeconds } = site.vsl;
   const useVimeo = vimeoId !== null;
-  const iframeRef = useVimeoBridge(useVimeo && progress.started);
+  const iframeRef = useVimeoBridge(useVimeo);
 
   const percent = Math.min(100, (progress.t / durationSeconds) * 100);
 
@@ -26,7 +26,7 @@ export function VslPlayer() {
         <div
           className={`relative flex aspect-video w-full items-center justify-center overflow-hidden ${HATCH}`}
         >
-          {useVimeo && progress.started && (
+          {useVimeo && (
             <iframe
               ref={iframeRef}
               src={vimeoSrc(vimeoId, hash)}
@@ -38,7 +38,7 @@ export function VslPlayer() {
             />
           )}
 
-          {!progress.started && (
+          {!useVimeo && !progress.started && (
             <button
               type="button"
               onClick={controls.play}
@@ -123,7 +123,7 @@ function vimeoSrc(id: string, hash: string | null) {
     dnt: "1",
     // Affiche les commandes Vimeo, notamment le volume et le plein écran.
     controls: "1",
-    autoplay: "1",
+    autoplay: "0",
   });
   if (hash) params.set("h", hash);
   return `https://player.vimeo.com/video/${id}?${params.toString()}`;
